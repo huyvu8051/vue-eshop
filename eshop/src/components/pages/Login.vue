@@ -7,12 +7,12 @@
           <table>
               <tr>
                   <td>
-                      UserName
+                      Email
                   </td>
                   <td>:</td>
                   <td>
-                      <input type="text" name="username" id="username" placeholder="Username"
-                        v-model="user.username">
+                      <input type="text" name="email" id="email" placeholder="email"
+                        v-model="user.email">
                   </td>
               </tr>
               <tr>
@@ -30,6 +30,14 @@
                   </td>
                   <td></td>
                   <td>
+                      <p class="error">{{error}}</p>
+                  </td>
+              </tr>
+              <tr>
+                  <td>
+                  </td>
+                  <td></td>
+                  <td>
                       <button type="submit" class="addBtn" @click="login">Login</button>
                   </td>
               </tr>
@@ -39,27 +47,36 @@
 </template>
 
 <script>
+import AuthenticationService from '@/services/AuthenticationService'
 export default {
   name: 'Login',
   data () {
     return {
       msg: '',
       user: {
-        username: '',
+        email: '',
         password: ''
-      }
+      },
+      error: ''
     }
   },
   methods: {
-    login () {
-      // console.log(this.user)
-      this.$eventBus.$emit('loadingStatus', true)
-
-      this.$axios.post('http://rimondb.com/tutorial/api/login', this.user)
-        .then(res => {
-          this.$eventBus.$emit('loadingStatus', false)
-          console.log(res)
+    async login () {
+      try {
+        this.$eventBus.$emit('loadingStatus', true)
+        console.log(this.user)
+        const response = await AuthenticationService.login(this.user)
+        console.log(response)
+        this.$store.dispatch('setToken', response.data.token)
+        this.$store.dispatch('setUser', response.data.user)
+        this.$eventBus.$emit('loadingStatus', false)
+        this.$router.push({
+          name: 'admin'
         })
+      } catch (error) {
+        this.error = error
+        this.$eventBus.$emit('loadingStatus', false)
+      }
     }
   }
 }
