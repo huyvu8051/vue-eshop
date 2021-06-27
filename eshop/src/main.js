@@ -3,11 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import axios from 'axios'
 
 Vue.config.productionTip = false
 
 var eventBus = new Vue()
 Vue.prototype.$eventBus = eventBus
+Vue.prototype.$axios = axios
 
 /* eslint-disable no-new */
 new Vue({

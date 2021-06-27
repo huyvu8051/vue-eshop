@@ -52,8 +52,14 @@ export default {
   },
   methods: {
     login () {
-      console.log(this.user)
+      // console.log(this.user)
       this.$eventBus.$emit('loadingStatus', true)
+
+      this.$axios.post('http://rimondb.com/tutorial/api/login', this.user)
+        .then(res => {
+          this.$eventBus.$emit('loadingStatus', false)
+          console.log(res)
+        })
     }
   }
 }

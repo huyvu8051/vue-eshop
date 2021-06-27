@@ -17,6 +17,7 @@ export default {
   },
   created () {
     this.$eventBus.$on('loadingStatus', payload => {
+      console.log('payload: ', payload)
       this.loading = payload
     })
   }
