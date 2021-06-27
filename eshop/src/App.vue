@@ -1,17 +1,20 @@
 <template>
   <div id="app">
-    <div id="loading" v-if="loading">
+    <v-app>
+      <div id="loading" v-if="loading">
         <img src="/static/img/loading.gif" alt="loading">
     </div>
-    <!-- header -->
-    <Header/>
-    <!-- end header -->
-    <router-view/>
+      <page-header />
+      <main>
+        <v-container fluid>
+          <router-view></router-view>
+        </v-container>
+      </main>
+    </v-app>
   </div>
 </template>
-
 <script>
-import Header from '@/components/Header'
+import PageHeader from '@/components/Header'
 export default {
   name: 'App',
   data () {
@@ -26,7 +29,7 @@ export default {
     })
   },
   components: {
-    Header
+    PageHeader
   }
 }
 </script>

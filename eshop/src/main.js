@@ -6,6 +6,7 @@ import router from './router'
 import { sync } from 'vuex-router-sync'
 import axios from 'axios'
 import store from '@/store/store'
+import vuetify from './plugins/vuetify'
 
 Vue.config.productionTip = false
 
@@ -21,5 +22,6 @@ new Vue({
   router,
   store,
   components: { App },
+  vuetify,
   template: '<App/>'
 })
