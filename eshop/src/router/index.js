@@ -3,6 +3,7 @@ import Router from 'vue-router'
 import Login from '@/components/pages/Login'
 import Admin from '@/components/pages/admin/Admin'
 import Category from '@/components/pages/admin/Category'
+import Product from '@/components/pages/admin/Product'
 import Register from '@/components/Register'
 import Songs from '@/components/Songs'
 import Home from '@/components/Home'
@@ -63,6 +64,11 @@ export default new Router({
           path: 'category',
           name: 'admin.category',
           component: Category
+        },
+        {
+          path: 'product',
+          name: 'admin.product',
+          component: Product
         }
       ]
     }

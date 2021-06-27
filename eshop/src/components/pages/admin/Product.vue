@@ -9,7 +9,7 @@
       <v-toolbar
         flat
       >
-        <v-toolbar-title>Thể loại</v-toolbar-title>
+        <v-toolbar-title>Sản phẩm</v-toolbar-title>
         <v-divider
           class="mx-4"
           inset
