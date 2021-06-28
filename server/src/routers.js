@@ -43,6 +43,5 @@ module.exports = (app) => {
     CategoryController.findAll)
     app.post('/category',
     CategoryController.create)
-    
 }
 

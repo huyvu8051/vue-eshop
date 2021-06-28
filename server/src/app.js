@@ -12,19 +12,36 @@ app.use(cors())
 
 require ('./routers') (app)
 
-const {Song, Artist, User, Product, Category} = require('./models')
+const {Song, Artist, User,Role, Product, Category} = require('./models')
 
 sequelize.sync({force: true})
     .then(() => {
     app.listen(config.port)
     console.log(`Server started on port ${config.port}`)
-}).then(() => {
+}).then(async () => {
     
 // Init database
-  User.create({
-    email: 'huyvu8051@gmail.com',
-    password: '123456789'
+  await Role.create({
+    name: 'ROLE_USER'
+  }).then(async () => {
+    await User.create({
+      email: 'user@gmail.com',
+      password: '123456789',
+    }).then(async(user) => {
+      await user.addRole(await Role.findByPk(1))
+    })
   })
+  await Role.create({
+    name: 'ROLE_ADMIN'
+  }).then(async () => {
+    await User.create({
+      email: 'admin@gmail.com',
+      password: '123456789',
+    }).then(async(user) => {
+      await user.addRole(await Role.findByPk(2))
+    })
+  })
+
 
   Artist.create({
     name: 'son tung mtp'

@@ -3,9 +3,9 @@ const jwt = require('jsonwebtoken')
 const config = require('../config/config')
 
 function jwtSignUser (user) {
-  const ONE_WEEK = 60 * 60 * 24 * 7
+  const ONE_HOUR = 60 * 60
   return jwt.sign(user, config.authentication.jwtSecret, {
-    expiresIn: ONE_WEEK
+    expiresIn: ONE_HOUR
   })
 }
 
@@ -26,6 +26,7 @@ module.exports = {
   },
   async login (req, res) {
     try {
+      console.log('=================LOGIN===================')
       const {email, password} = req.body
       const user = await User.findOne({
         where: {

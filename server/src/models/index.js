@@ -29,12 +29,21 @@ db.Song = require('./Song') (sequelize, Sequelize)
 db.Artist = require('./Artist') (sequelize, Sequelize)
 db.Product = require('./Product') (sequelize, Sequelize)
 db.Category = require('./Category') (sequelize, Sequelize)
+db.Role = require('./Role') (sequelize, Sequelize)
 
 db.Artist.hasMany(db.Song)
 db.Song.belongsTo(db.Artist)
 
 db.Category.hasMany(db.Product)
 db.Product.belongsTo(db.Category)
+
+db.User.belongsToMany(db.Role, {
+    through: "User_Role"
+})
+db.Role.belongsToMany(db.User, {
+    through: "User_Role"
+})
+
 
 console.log('dir: ', __dirname)
 module.exports = db
