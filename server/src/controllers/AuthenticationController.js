@@ -68,7 +68,7 @@ module.exports = {
       console.log(signature)
 
       var token = jwt.sign({ id: user.id }, signature, {
-        expiresIn: 60 // 24 hours
+        expiresIn: 60 * 60 * 24 // 24 hours
       });
 
       var authorities = [];
