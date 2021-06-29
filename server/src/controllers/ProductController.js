@@ -13,7 +13,6 @@ module.exports = {
           // offset: req.body.offset
         })
       res.send(products)
-      console.log(products)
     } catch (err) {
       console.log('============get all songs err:', err)
       res.status(400).send({

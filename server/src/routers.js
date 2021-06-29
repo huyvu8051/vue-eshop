@@ -4,6 +4,7 @@ const SongsController = require('./controllers/SongsController')
 const ArtistController = require('./controllers/ArtistController')
 const ProductController = require('./controllers/ProductController')
 const CategoryController = require('./controllers/CategoryController')
+const Auth = require('./controllers/Auth')
 
 module.exports = (app) => {
     app.post('/register',
@@ -29,7 +30,10 @@ module.exports = (app) => {
     // product router
 
     app.get('/product',
+    Auth.verifyToken,
+    Auth.isAdmin,
     ProductController.findAll)
+    
     app.post('/product',
     ProductController.create)
     app.put('/product',
