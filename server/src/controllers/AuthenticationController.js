@@ -1,6 +1,7 @@
-const {User} = require('../models')
+const {User, Role} = require('../models')
 const jwt = require('jsonwebtoken')
 const config = require('../config/config')
+const crypto = require('crypto');
 
 function jwtSignUser (user) {
   const ONE_HOUR = 60 * 60
@@ -10,6 +11,9 @@ function jwtSignUser (user) {
 }
 
 module.exports = {
+
+  // =========== REGISTER ==============
+
   async register (req, res) {
     try {
       const user = await User.create(req.body)
@@ -24,6 +28,9 @@ module.exports = {
       })
     }
   },
+
+  // =========== LOGIN ==============
+
   async login (req, res) {
     try {
       console.log('=================LOGIN===================')
@@ -31,7 +38,8 @@ module.exports = {
       const user = await User.findOne({
         where: {
           email: email
-        }
+        },
+        include: Role
       })
 
       if (!user) {
@@ -47,10 +55,37 @@ module.exports = {
         })
       }
 
-      const userJson = user.toJSON()
+      const { privateKey, publicKey } = crypto.generateKeyPairSync('ec', {
+        namedCurve: 'sect239k1'
+      });
+      console.log(publicKey)
+
+      // generate a signature of the payload
+      const sign = crypto.createSign('SHA256');
+      sign.write(`${user}`);
+      sign.end();
+      var signature = sign.sign(privateKey, 'hex');
+      console.log(signature)
+
+      var token = jwt.sign({ id: user.id }, signature, {
+        expiresIn: 86400 // 24 hours
+      });
+
+      var authorities = [];
+
+      // console.log(user.Roles)
+
+      for (let i = 0; i < user.Roles.length; i++) {
+        authorities.push(user.Roles[i].name.toUpperCase());
+      }
+      
+
       res.send({
-        user: userJson,
-        token: jwtSignUser(userJson)
+        id: user.id,
+        email: user.email,
+        roles: authorities,
+        accessToken: token, // access token
+        signature: signature // signature
       })
     } catch (err) {
         console.log('error: ', err)

@@ -48,6 +48,7 @@
 
 <script>
 import AuthenticationService from '@/services/AuthenticationService'
+import Store from '@/store/store.js'
 export default {
   name: 'Login',
   data () {
@@ -66,12 +67,15 @@ export default {
         this.$eventBus.$emit('loadingStatus', true)
         console.log(this.user)
         const response = await AuthenticationService.login(this.user)
-        console.log(response)
-        this.$store.dispatch('setToken', response.data.token)
-        this.$store.dispatch('setUser', response.data.user)
+        console.log('response==========', response)
+        this.$store.dispatch('setToken', response.data.accessToken)
+        this.$store.dispatch('setEmail', response.data.email)
+        this.$store.dispatch('setRoles', response.data.roles)
+        this.$store.dispatch('setSignature', response.data.signature)
         this.$eventBus.$emit('loadingStatus', false)
+        console.log(Store.state)
         this.$router.push({
-          name: 'admin'
+          name: 'admin.product'
         })
       } catch (error) {
         this.error = error

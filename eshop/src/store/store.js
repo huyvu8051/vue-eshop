@@ -11,24 +11,38 @@ export default new Vuex.Store({
   ],
   state: {
     token: null,
-    user: null,
+    signature: null,
+    email: null,
+    roles: null,
     isUserLoggedIn: false
   },
   mutations: {
     setToken (state, token) {
       state.token = token
-      state.isUserLoggedIn = !!(token)
+      state.isUserLoggedIn = state.signature = !!(token)
     },
-    setUser (state, user) {
-      state.user = user
+    setEmail (state, email) {
+      state.email = email
+    },
+    setRoles (state, roles) {
+      state.roles = roles
+    },
+    setSignature (state, signature) {
+      state.signature = signature
     }
   },
   actions: {
     setToken ({commit}, token) {
       commit('setToken', token)
     },
-    setUser ({commit}, user) {
-      commit('setUser', user)
+    setEmail ({commit}, email) {
+      commit('setEmail', email)
+    },
+    setRoles ({commit}, roles) {
+      commit('setRoles', roles)
+    },
+    setSignature ({commit}, signature) {
+      commit('setSignature', signature)
     }
   }
 })
