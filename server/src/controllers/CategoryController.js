@@ -5,9 +5,7 @@ module.exports = {
     try {
       const categories = await Category.findAll()
       res.send(categories)
-      console.log(categories)
     } catch (err) {
-      console.log('============get all songs err:', err)
       res.status(400).send({
         error: 'this req is error'
       })

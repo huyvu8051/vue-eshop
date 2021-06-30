@@ -68,7 +68,7 @@ export default {
         console.log(this.user)
         const response = await AuthenticationService.login(this.user)
         console.log('response==========', response)
-        this.$store.dispatch('setToken', response.data.accessToken)
+        this.$store.dispatch('setToken', response.data.token)
         this.$store.dispatch('setEmail', response.data.email)
         this.$store.dispatch('setRoles', response.data.roles)
         this.$store.dispatch('setSignature', response.data.signature)

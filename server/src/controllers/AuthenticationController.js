@@ -81,10 +81,9 @@ module.exports = {
       
 
       res.send({
-        id: user.id,
-        email: user.email,
-        roles: authorities,
-        accessToken: token, // access token
+        email: user.email,  // user email
+        roles: authorities, // roles
+        token: token, // token
         signature: signature // signature
       })
     } catch (err) {

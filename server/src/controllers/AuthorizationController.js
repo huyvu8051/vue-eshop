@@ -3,9 +3,10 @@ const { User, Role } = require('../models')
 
 module.exports = {
     verifyToken (req, res, next) {
-        let token = req.headers['accesstoken']
+        let token = req.headers['token']
         let sign = req.headers['signature']
-        console.log('req Auth=================', req.headers)
+
+        console.log(token, sign)
 
         if (!token) {
             return res.status(403).send({
