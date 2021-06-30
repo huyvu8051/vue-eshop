@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/pages/Login'
+import TestLogin from '@/components/pages/TestLogin'
 import Admin from '@/components/pages/admin/Admin'
 import Category from '@/components/pages/admin/Category'
 import Product from '@/components/pages/admin/Product'
@@ -28,6 +29,11 @@ export default new Router({
       path: '/login',
       name: 'login',
       component: Login
+    },
+    {
+      path: '/testlogin',
+      name: 'testlogin',
+      component: TestLogin
     },
     {
       path: '/',
