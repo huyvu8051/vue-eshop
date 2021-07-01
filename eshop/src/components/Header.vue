@@ -1,80 +1,54 @@
 <template>
-  <v-toolbar fixed class="cyan" dark>
-    <v-toolbar-title class="mr-4">
-      <router-link
-        class="home"
-        :to="{
-          name: 'home'
-        }">
-        Eshop
-      </router-link>
-    </v-toolbar-title>
-
-    <v-toolbar-items>
-      <v-btn
-        text
-        dark
-        :to="{
-          name: 'home'
-        }">
-        Trang chủ
+  <nav>
+    <v-app-bar app flat>
+      <v-app-bar-nav-icon class="grey--text" @click="drawer = !drawer">
+      </v-app-bar-nav-icon>
+      <v-toolbar-title class="text-uppercase grey--text">
+        <span class="font-weight-light">E</span>
+        <span>Shop</span>
+      </v-toolbar-title>
+      <v-spacer></v-spacer>
+      <v-btn text color="grey" v-if="!$store.state.isUserLoggedIn" :to="{name: 'login'}">
+        <span>Sign in</span>
+        <v-icon right>login</v-icon>
       </v-btn>
-      <v-btn
-        text
-        dark
-        :to="{
-          name: 'songs'
-        }">
-        Danh Sách
+      <v-btn text color="grey" v-if="!$store.state.isUserLoggedIn" :to="{name: 'register'}">
+        <span>Sign up</span>
+        <v-icon right>how_to_reg</v-icon>
       </v-btn>
-    </v-toolbar-items>
-
-    <v-spacer></v-spacer>
-
-    <v-toolbar-items>
-      <v-btn
-        v-if="!$store.state.isUserLoggedIn"
-        text
-        dark
-        :to="{
-          name: 'login'
-        }">
-        Đăng nhập
+      <v-btn text color="grey" v-if="$store.state.isUserLoggedIn" :to="{name: 'userDetail'}">
+        <span>Hi!</span>
+        <v-icon right>account_box</v-icon>
       </v-btn>
-
-      <v-btn
-        v-if="!$store.state.isUserLoggedIn"
-        text
-        dark
-        :to="{
-          name: 'register'
-        }">
-        Đăng kí
+      <v-btn text color="grey" v-if="$store.state.isUserLoggedIn" @click="logout">
+        <span>Sign out</span>
+        <v-icon right>exit_to_app</v-icon>
       </v-btn>
-
-      <v-btn
-        v-if="$store.state.isUserLoggedIn"
-        text
-        dark
-        @click="userDetail"
-        >
-        Xin chào {{email}}
-      </v-btn>
-      <v-btn
-        v-if="$store.state.isUserLoggedIn"
-        text
-        dark
-        @click="logout">
-        Đăng xuất
-      </v-btn>
-    </v-toolbar-items>
-  </v-toolbar>
+    </v-app-bar>
+    <v-navigation-drawer app v-model="drawer" class="primary">
+      <v-list>
+        <v-list-item v-for="(link, index) in links" :key="index" router :to="link.route">
+          <v-list-item-action>
+            <v-icon class="white--text">{{link.icon}}</v-icon>
+          </v-list-item-action>
+          <v-list-item-content>
+            <v-list-item-title class="white--text">{{link.text}}</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
+      </v-list>
+    </v-navigation-drawer>
+  </nav>
 </template>
 
 <script>
 export default {
   data () {
     return {
+      drawer: false,
+      links: [
+        {icon: 'inventory_2', text: 'Product', route: '/admin/product'},
+        {icon: 'category', text: 'Category', route: '/admin/category'}
+      ],
       email: ''
     }
   },
@@ -83,7 +57,7 @@ export default {
       this.$store.dispatch('setToken', null)
       this.$store.dispatch('setEmail', null)
       this.$router.push({
-        name: 'home'
+        name: 'login'
       })
     },
     userDetail () {

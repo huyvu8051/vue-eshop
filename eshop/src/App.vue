@@ -1,17 +1,13 @@
 <template>
-  <div id="app">
-    <v-app>
-      <div id="loading" v-if="loading">
-        <img src="/static/img/loading.gif" alt="loading">
+  <v-app>
+    <div id="loading" v-if="loading">
+      <img src="/static/img/loading.gif" alt="loading">
     </div>
-      <page-header />
-      <main>
-        <v-container fluid>
-          <router-view></router-view>
-        </v-container>
-      </main>
-    </v-app>
-  </div>
+    <page-header/>
+    <v-main class="ma-4">
+      <router-view></router-view>
+    </v-main>
+  </v-app>
 </template>
 <script>
 import PageHeader from '@/components/Header'
