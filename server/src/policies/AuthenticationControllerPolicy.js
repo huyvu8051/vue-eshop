@@ -14,7 +14,7 @@ const ERRORS = { 'email': EMAIL_ERROR, 'password': PASSWORD_ERROR }
 module.exports = {
     register(req, res, next) {
         const schema = Joi.object({
-            email: Joi.string().email(),
+            email: Joi.string().max(40).email(),
             password: Joi.string().regex(
                 new RegExp('^[a-zA-Z0-9]{8,32}$')
             )
