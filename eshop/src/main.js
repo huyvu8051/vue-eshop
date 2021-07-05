@@ -8,7 +8,6 @@ import axios from 'axios'
 import store from '@/store/store'
 import vuetify from './plugins/vuetify'
 import Vuelidate from 'vuelidate'
-
 Vue.use(Vuelidate)
 
 Vue.config.productionTip = false

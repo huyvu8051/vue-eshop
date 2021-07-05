@@ -38,6 +38,101 @@
 
             <v-card-text>
               <v-container>
+                <!-- vee validation -->
+                  <validation-observer
+                    ref="observer"
+                    v-slot="{ invalid }"
+                  >
+                    <form @submit.prevent="submit">
+                      <v-row>
+                        <!-- name -->
+                        <v-col
+                          cols="12"
+                          sm="12"
+                          md="12">
+                          <validation-provider
+                            v-slot="{ errors }"
+                            name="Name"
+                            rules="required|max:255"
+                          >
+                            <v-text-field
+                              v-model="editedItem.name"
+                              :counter="255"
+                              :error-messages="errors"
+                              label="Name"
+                              required
+                            ></v-text-field>
+                          </validation-provider>
+                        </v-col>
+                        <!-- category -->
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="4">
+                          <validation-provider
+                            v-slot="{ errors }"
+                            name="select"
+                            rules="required"
+                          >
+                            <v-select
+                              v-model="editedItem.Category"
+                              :items="categories"
+                              label="Category"
+                              item-text="name"
+                              return-object
+                              :error-messages="errors"
+                              data-vv-name="select"
+                              required
+                            ></v-select>
+                          </validation-provider>
+                        </v-col>
+                        <!-- category -->
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="4">
+                          <v-file-input
+                            accept="image/*"
+                            label="File input"
+                          ></v-file-input>
+                        </v-col>
+                        <!-- available -->
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="4">
+                          <validation-provider
+                            v-slot="{ errors }"
+                            rules="required"
+                            name="checkbox"
+                          >
+                            <v-switch
+                              v-model="editedItem.available"
+                              :error-messages="errors"
+                              label="available"
+                            ></v-switch>
+                          </validation-provider>
+                        </v-col>
+                        <!-- button -->
+                        <v-col
+                          cols="12"
+                          sm="6"
+                          md="4">
+                          <v-btn
+                            class="mr-4"
+                            type="submit"
+                            :disabled="invalid"
+                          >
+                            submit
+                          </v-btn>
+                          <v-btn @click="clear">
+                            clear
+                          </v-btn>
+                        </v-col>
+                      </v-row>
+                    </form>
+                  </validation-observer>
+                  <!-- vee validation -->
                 <v-row>
                   <v-col
                     cols="12"
@@ -88,8 +183,8 @@
                     md="4"
                   >
                     <v-text-field
-                      v-model="editedItem.avalable"
-                      label="Avalable (g)"
+                      v-model="editedItem.available"
+                      label="available (g)"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -179,7 +274,39 @@
 <script>
   import ProductService from '@/services/ProductService'
   import CategoryService from '@/services/CategoryService'
+  import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
+  import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
+  setInteractionMode('eager')
+
+  extend('digits', {
+    ...digits,
+    message: '{_field_} needs to be {length} digits. ({_value_})'
+  })
+
+  extend('required', {
+    ...required,
+    message: '{_field_} can not be empty'
+  })
+
+  extend('max', {
+    ...max,
+    message: '{_field_} may not be greater than {length} characters'
+  })
+
+  extend('regex', {
+    ...regex,
+    message: '{_field_} {_value_} does not match {regex}'
+  })
+
+  extend('email', {
+    ...email,
+    message: 'Email must be valid'
+  })
   export default {
+    components: {
+      ValidationProvider,
+      ValidationObserver
+    },
     data: () => ({
       categories: [],
       dialog: false,
@@ -197,7 +324,7 @@
         { text: 'Category', value: 'Category.name' },
         { text: 'Price(đ)', value: 'price' },
         { text: 'Quantity', value: 'quantity' },
-        { text: 'Avalable', sortable: false, value: 'avalable' },
+        { text: 'available', sortable: false, value: 'available' },
         { text: 'Img', sortable: false, value: 'img' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
@@ -212,7 +339,7 @@
           name: ''
         },
         quantity: 69,
-        avalable: false,
+        available: false,
         img: '1.img',
         detail: 'details'
       },
@@ -308,6 +435,14 @@
           this.desserts.push(respone.data)
         }
         this.close()
+      },
+      clear () {
+        this.name = ''
+        this.phoneNumber = ''
+        this.email = ''
+        this.select = null
+        this.checkbox = null
+        this.$refs.observer.reset()
       }
     }
   }
