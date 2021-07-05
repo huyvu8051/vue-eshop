@@ -189,16 +189,16 @@
           text: 'Id', value: 'id'
         },
         {
-          text: 'Dessert (100g serving)',
+          text: 'Name',
           align: 'start',
           sortable: false,
           value: 'name'
         },
         { text: 'Category', value: 'Category.name' },
         { text: 'Price(đ)', value: 'price' },
-        { text: 'Quantity (g)', value: 'quantity' },
-        { text: 'Avalable (g)', value: 'avalable' },
-        { text: 'Img (g)', value: 'img' },
+        { text: 'Quantity', value: 'quantity' },
+        { text: 'Avalable', sortable: false, value: 'avalable' },
+        { text: 'Img', sortable: false, value: 'img' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       desserts: [],
