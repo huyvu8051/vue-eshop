@@ -11,12 +11,14 @@ const INVALID_ERROR = 'Invalid registration information'
 
 const ERRORS = { 'email': EMAIL_ERROR, 'password': PASSWORD_ERROR }
 
+const validPasswordRegex = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,32}$/
+
 module.exports = {
     register(req, res, next) {
         const schema = Joi.object({
             email: Joi.string().max(40).email(),
             password: Joi.string().regex(
-                new RegExp('^[a-zA-Z0-9]{8,32}$')
+                new RegExp(validPasswordRegex)
             )
         })
 

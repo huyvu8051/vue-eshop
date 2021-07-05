@@ -61,7 +61,15 @@
     },
     mixins: [validationMixin],
     validations: {
-      password: { required, maxLength: maxLength(32), minLength: minLength(8) },
+       password: {
+        required,
+        maxLength: maxLength(32),
+        minLength: minLength(8),
+        containsULN: function (value) {
+          const containsULN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,32}$/.test(value)
+          return containsULN
+        }
+      },
       confirmPassword: { required, sameAsPassword: sameAs('password') },
       email: { required, email, maxLength: maxLength(40) }
     },
@@ -77,9 +85,10 @@
       passwordErrors () {
         const errors = []
         if (!this.$v.password.$dirty) return errors
-        !this.$v.password.maxLength && errors.push('Password must be at most 32 characters long')
-        !this.$v.password.minLength && errors.push('Password must be at least 8 characters long')
         !this.$v.password.required && errors.push('Password is required.')
+        !this.$v.password.minLength && errors.push('Password must be at least 8 characters long')
+        !this.$v.password.maxLength && errors.push('Password must be at most 32 characters long')
+        !this.$v.password.containsULN && errors.push('Password must be contains UPPERCASE, lowercase and number.')
         return errors
       },
       confirmPasswordErrors () {

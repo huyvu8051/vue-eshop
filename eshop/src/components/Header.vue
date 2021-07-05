@@ -22,7 +22,7 @@
       </v-btn>
       <v-btn text color="grey" v-if="$store.state.isUserLoggedIn" @click="logout">
         <span>Sign out</span>
-        <v-icon right>exit_to_app</v-icon>
+        <v-icon right>logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer app v-model="drawer" class="primary">

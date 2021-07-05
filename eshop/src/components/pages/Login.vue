@@ -24,11 +24,11 @@
           :disabled="$v.$anyError"
           @click="submit"
         >
-          submit
+          <span id="submit">submit</span>
         </v-btn>
         <v-btn @click="clear"
           class="warning">
-          clear
+          <span>clear</span>
         </v-btn>
       </form>
     </Panel>
@@ -47,8 +47,16 @@
     },
     mixins: [validationMixin],
     validations: {
-      password: { required, maxLength: maxLength(32), minLength: minLength(8) },
-      email: { required, email }
+      password: {
+        required,
+        maxLength: maxLength(32),
+        minLength: minLength(8),
+        containsULN: function (value) {
+          const containsULN = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])[0-9a-zA-Z]{8,32}$/.test(value)
+          return containsULN
+        }
+      },
+      email: { required, email, maxLength: maxLength(40) }
     },
 
     data: () => ({
@@ -60,16 +68,17 @@
       passwordErrors () {
         const errors = []
         if (!this.$v.password.$dirty) return errors
-        !this.$v.password.maxLength && errors.push('Password must be at most 32 characters long')
-        !this.$v.password.minLength && errors.push('Password must be at least 8 characters long')
         !this.$v.password.required && errors.push('Password is required.')
+        !this.$v.password.minLength && errors.push('Password must be at least 8 characters long')
+        !this.$v.password.maxLength && errors.push('Password must be at most 32 characters long')
+        !this.$v.password.containsULN && errors.push('Password must be contains UPPERCASE, lowercase and numberrr.')
         return errors
       },
       emailErrors () {
         const errors = []
         if (!this.$v.email.$dirty) return errors
         !this.$v.email.email && errors.push('Must be valid e-mail')
-        !this.$v.email.required && errors.push('E-mail is required')
+        !this.$v.email.required && errors.push('E-mail is required.')
         return errors
       }
     },

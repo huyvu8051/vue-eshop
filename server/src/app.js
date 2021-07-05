@@ -26,7 +26,7 @@ sequelize.sync({force: true})
   }).then(async () => {
     await User.create({
       email: 'user@gmail.com',
-      password: '123456789',
+      password: 'Huy12345',
     }).then(async(user) => {
       await user.addRole(await Role.findByPk(1))
     })
@@ -36,7 +36,7 @@ sequelize.sync({force: true})
   }).then(async () => {
     await User.create({
       email: 'admin@gmail.com',
-      password: '123456789',
+      password: 'Huy12345',
     }).then(async(user) => {
       await user.addRole(await Role.findByPk(2))
     })
