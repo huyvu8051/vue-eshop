@@ -35,104 +35,9 @@
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-container>
-                <!-- vee validation -->
-                  <validation-observer
-                    ref="observer"
-                    v-slot="{ invalid }"
-                  >
-                    <form @submit.prevent="submit">
-                      <v-row>
-                        <!-- name -->
-                        <v-col
-                          cols="12"
-                          sm="12"
-                          md="12">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            name="Name"
-                            rules="required|max:255"
-                          >
-                            <v-text-field
-                              v-model="editedItem.name"
-                              :counter="255"
-                              :error-messages="errors"
-                              label="Name"
-                              required
-                            ></v-text-field>
-                          </validation-provider>
-                        </v-col>
-                        <!-- category -->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="4">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            name="select"
-                            rules="required"
-                          >
-                            <v-select
-                              v-model="editedItem.Category"
-                              :items="categories"
-                              label="Category"
-                              item-text="name"
-                              return-object
-                              :error-messages="errors"
-                              data-vv-name="select"
-                              required
-                            ></v-select>
-                          </validation-provider>
-                        </v-col>
-                        <!-- category -->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="4">
-                          <v-file-input
-                            accept="image/*"
-                            label="File input"
-                          ></v-file-input>
-                        </v-col>
-                        <!-- available -->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="4">
-                          <validation-provider
-                            v-slot="{ errors }"
-                            rules="required"
-                            name="checkbox"
-                          >
-                            <v-switch
-                              v-model="editedItem.available"
-                              :error-messages="errors"
-                              label="available"
-                            ></v-switch>
-                          </validation-provider>
-                        </v-col>
-                        <!-- button -->
-                        <v-col
-                          cols="12"
-                          sm="6"
-                          md="4">
-                          <v-btn
-                            class="mr-4"
-                            type="submit"
-                            :disabled="invalid"
-                          >
-                            submit
-                          </v-btn>
-                          <v-btn @click="clear">
-                            clear
-                          </v-btn>
-                        </v-col>
-                      </v-row>
-                    </form>
-                  </validation-observer>
-                  <!-- vee validation -->
+                <!-- form start -->
                 <v-row>
                   <v-col
                     cols="12"
@@ -142,6 +47,11 @@
                     <v-text-field
                       v-model="editedItem.name"
                       label="Name"
+                      :counter="255"
+                      :error-messages="nameErrors"
+                      required
+                      @input="$v.editedItem.name.$touch()"
+                      @blur="$v.editedItem.name.$touch()"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -150,8 +60,15 @@
                     md="4"
                   >
                     <v-text-field
+                      type="number"
+                      step="1"
                       v-model="editedItem.price"
                       label="Price"
+                      :error-messages="priceErrors"
+                      required
+                      min="0"
+                      @input="$v.editedItem.price.$touch()"
+                      @blur="$v.editedItem.price.$touch()"
                     ></v-text-field>
                   </v-col>
                   <v-col
@@ -165,6 +82,9 @@
                       label="Category"
                       item-text="name"
                       return-object
+                      :error-messages="categoryErrors"
+                      @input="$v.editedItem.Category.$touch()"
+                      @blur="$v.editedItem.Category.$touch()"
                     ></v-select>
                   </v-col>
                   <v-col
@@ -175,17 +95,17 @@
                     <v-text-field
                       v-model="editedItem.quantity"
                       type="number"
-                      label="Number"></v-text-field>
+                      label="Quantity"></v-text-field>
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
                     md="4"
                   >
-                    <v-text-field
+                    <v-switch
                       v-model="editedItem.available"
-                      label="available (g)"
-                    ></v-text-field>
+                      label="Available"
+                    ></v-switch>
                   </v-col>
                   <v-col
                     cols="12"
@@ -212,6 +132,7 @@
                   </v-col>
                 </v-row>
               </v-container>
+              <!-- form end -->
             </v-card-text>
 
             <v-card-actions>
@@ -227,6 +148,7 @@
                 color="blue darken-1"
                 text
                 @click="save"
+                :disabled="$v.$anyError"
               >
                 Save
               </v-btn>
@@ -274,38 +196,18 @@
 <script>
   import ProductService from '@/services/ProductService'
   import CategoryService from '@/services/CategoryService'
-  import { required, digits, email, max, regex } from 'vee-validate/dist/rules'
-  import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
-  setInteractionMode('eager')
-
-  extend('digits', {
-    ...digits,
-    message: '{_field_} needs to be {length} digits. ({_value_})'
-  })
-
-  extend('required', {
-    ...required,
-    message: '{_field_} can not be empty'
-  })
-
-  extend('max', {
-    ...max,
-    message: '{_field_} may not be greater than {length} characters'
-  })
-
-  extend('regex', {
-    ...regex,
-    message: '{_field_} {_value_} does not match {regex}'
-  })
-
-  extend('email', {
-    ...email,
-    message: 'Email must be valid'
-  })
+  import { validationMixin } from 'vuelidate'
+  import { required, maxLength } from 'vuelidate/lib/validators'
   export default {
-    components: {
-      ValidationProvider,
-      ValidationObserver
+    mixins: [validationMixin],
+
+    validations: {
+      editedItem: {
+        name: { required, maxLength: maxLength(225) },
+        price: { required },
+        Category: { required },
+        quantity: { required }
+      }
     },
     data: () => ({
       categories: [],
@@ -333,28 +235,51 @@
       editedItem: {
         name: 'Test',
         price: 2000000,
-        categoryId: 0,
-        Category: {
-          id: 0,
-          name: ''
-        },
+        Category: null,
         quantity: 69,
         available: false,
         img: '1.img',
         detail: 'details'
       },
       defaultItem: {
-        name: 'defaultItem',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        name: 'Default',
+        price: 0,
+        Category: null,
+        quantity: 0,
+        available: false,
+        img: '1.img',
+        detail: 'default'
       }
     }),
 
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      },
+      nameErrors () {
+        const errors = []
+        if (!this.$v.editedItem.name.$dirty) return errors
+        !this.$v.editedItem.name.maxLength && errors.push('Name must be at most 255 characters long')
+        !this.$v.editedItem.name.required && errors.push('Name is required.')
+        return errors
+      },
+      priceErrors () {
+        const errors = []
+        if (!this.$v.editedItem.price.$dirty) return errors
+        !this.$v.editedItem.price.required && errors.push('Price is required.')
+        return errors
+      },
+      categoryErrors () {
+        const errors = []
+        if (!this.$v.editedItem.Category.$dirty) return errors
+        !this.$v.editedItem.Category.required && errors.push('Category is required.')
+        return errors
+      },
+      quantityErrors () {
+        const errors = []
+        if (!this.$v.name.$dirty) return errors
+        !this.$v.name.required && errors.push('Quantity is required.')
+        return errors
       }
     },
 
@@ -375,12 +300,10 @@
     methods: {
       async initialize () {
         const respone = await ProductService.findAll()
-        console.log(respone.data)
         this.desserts = respone.data
       },
       async initializeCategories () {
         const respone = await CategoryService.findAll()
-        console.log('Init Categories: ', respone.data)
         this.categories = respone.data
       },
 
@@ -418,23 +341,20 @@
           this.editedIndex = -1
         })
       },
-
       async save () {
-        if (this.editedIndex > -1) {
-          // update
+        this.$v.$touch()
+        if (!this.$v.$anyError) {
           this.editedItem.CategoryId = this.editedItem.Category.id
-          const respone = await ProductService.update(this.editedItem)
-          respone.data.Category = this.categories.find(category => category.id === respone.data.CategoryId)
-           Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          // create
-          this.editedItem.CategoryId = this.editedItem.Category.id
-          console.log('save', this.editedItem)
           const respone = await ProductService.save(this.editedItem)
+          console.log(respone)
           respone.data.Category = this.categories.find(category => category.id === respone.data.CategoryId)
-          this.desserts.push(respone.data)
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          } else {
+            this.desserts.unshift(this.editedItem)
+          }
+          this.close()
         }
-        this.close()
       },
       clear () {
         this.name = ''

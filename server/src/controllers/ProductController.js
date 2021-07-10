@@ -6,7 +6,7 @@ module.exports = {
       const products = await Product.findAll(
         { 
           order: [
-            ['updatedAt', 'DESC']
+            ['createdAt', 'DESC']
           ],
           include: Category,
           // limit: 5,
@@ -27,11 +27,11 @@ module.exports = {
     try {
       const product = await Product.create(req.body)
       res.send(product)
-      console.log('created====',product)
+      console.log('CREATED: ',product)
     } catch (err) {
-      console.log('============create song err:', err)
+      console.log('CREATE PRODUCT ERRORS: ', err)
       res.status(400).send({
-        error: 'this req is error'
+        error: 'THIS REQUEST IS ERRORS'
       })
     }
   },

@@ -5,6 +5,12 @@ export default {
     return Api().get('category')
   },
   save (credentials) {
-    return Api().post('category', credentials)
+    if (credentials.id == null) {
+      return Api().post('category', credentials)
+    }
+    return Api().put('category', credentials)
+  },
+  delete (credentials) {
+    return Api().delete('category', credentials)
   }
 }

@@ -18,7 +18,7 @@
         <v-spacer></v-spacer>
         <v-dialog
           v-model="dialog"
-          max-width="500px"
+          max-width="1000px"
         >
           <template v-slot:activator="{ on, attrs }">
             <v-btn
@@ -35,62 +35,38 @@
             <v-card-title>
               <span class="text-h5">{{ formTitle }}</span>
             </v-card-title>
-
             <v-card-text>
               <v-container>
+                <!-- form start -->
                 <v-row>
                   <v-col
                     cols="12"
                     sm="6"
-                    md="4"
+                    md="6"
                   >
                     <v-text-field
                       v-model="editedItem.name"
-                      label="Dessert name"
+                      label="Name"
+                      :counter="255"
+                      :error-messages="nameErrors"
+                      required
+                      @input="$v.editedItem.name.$touch()"
+                      @blur="$v.editedItem.name.$touch()"
                     ></v-text-field>
                   </v-col>
                   <v-col
                     cols="12"
                     sm="6"
-                    md="4"
+                    md="6"
                   >
-                    <v-text-field
-                      v-model="editedItem.calories"
-                      label="Calories"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.fat"
-                      label="Fat (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.carbs"
-                      label="Carbs (g)"
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                    cols="12"
-                    sm="6"
-                    md="4"
-                  >
-                    <v-text-field
-                      v-model="editedItem.protein"
-                      label="Protein (g)"
-                    ></v-text-field>
+                    <v-switch
+                      v-model="editedItem.available"
+                      label="Available"
+                    ></v-switch>
                   </v-col>
                 </v-row>
               </v-container>
+              <!-- form end -->
             </v-card-text>
 
             <v-card-actions>
@@ -106,6 +82,7 @@
                 color="blue darken-1"
                 text
                 @click="save"
+                :disabled="$v.$anyError"
               >
                 Save
               </v-btn>
@@ -151,44 +128,57 @@
   </v-data-table>
 </template>
 <script>
+  import ProductService from '@/services/ProductService'
+  import CategoryService from '@/services/CategoryService'
+  import { validationMixin } from 'vuelidate'
+  import { required, maxLength } from 'vuelidate/lib/validators'
   export default {
+    mixins: [validationMixin],
+
+    validations: {
+      editedItem: {
+        name: { required, maxLength: maxLength(225) }
+      }
+    },
     data: () => ({
+      categories: [],
       dialog: false,
       dialogDelete: false,
       headers: [
         {
-          text: 'Dessert (100g serving)',
+          text: 'Id', value: 'id'
+        },
+        {
+          text: 'Name',
           align: 'start',
           sortable: false,
           value: 'name'
         },
-        { text: 'Calories', value: 'calories' },
-        { text: 'Fat (g)', value: 'fat' },
-        { text: 'Carbs (g)', value: 'carbs' },
-        { text: 'Protein (g)', value: 'protein' },
+        { text: 'available', sortable: false, value: 'available' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       desserts: [],
       editedIndex: -1,
       editedItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        name: 'Test',
+        available: false
       },
       defaultItem: {
-        name: '',
-        calories: 0,
-        fat: 0,
-        carbs: 0,
-        protein: 0
+        name: 'Default',
+        available: false
       }
     }),
 
     computed: {
       formTitle () {
         return this.editedIndex === -1 ? 'New Item' : 'Edit Item'
+      },
+      nameErrors () {
+        const errors = []
+        if (!this.$v.editedItem.name.$dirty) return errors
+        !this.$v.editedItem.name.maxLength && errors.push('Name must be at most 255 characters long')
+        !this.$v.editedItem.name.required && errors.push('Name is required.')
+        return errors
       }
     },
 
@@ -206,81 +196,10 @@
     },
 
     methods: {
-      initialize () {
-        this.desserts = [
-          {
-            name: 'Frozen Yogurt',
-            calories: 159,
-            fat: 6.0,
-            carbs: 24,
-            protein: 4.0
-          },
-          {
-            name: 'Ice cream sandwich',
-            calories: 237,
-            fat: 9.0,
-            carbs: 37,
-            protein: 4.3
-          },
-          {
-            name: 'Eclair',
-            calories: 262,
-            fat: 16.0,
-            carbs: 23,
-            protein: 6.0
-          },
-          {
-            name: 'Cupcake',
-            calories: 305,
-            fat: 3.7,
-            carbs: 67,
-            protein: 4.3
-          },
-          {
-            name: 'Gingerbread',
-            calories: 356,
-            fat: 16.0,
-            carbs: 49,
-            protein: 3.9
-          },
-          {
-            name: 'Jelly bean',
-            calories: 375,
-            fat: 0.0,
-            carbs: 94,
-            protein: 0.0
-          },
-          {
-            name: 'Lollipop',
-            calories: 392,
-            fat: 0.2,
-            carbs: 98,
-            protein: 0
-          },
-          {
-            name: 'Honeycomb',
-            calories: 408,
-            fat: 3.2,
-            carbs: 87,
-            protein: 6.5
-          },
-          {
-            name: 'Donut',
-            calories: 452,
-            fat: 25.0,
-            carbs: 51,
-            protein: 4.9
-          },
-          {
-            name: 'KitKat',
-            calories: 518,
-            fat: 26.0,
-            carbs: 65,
-            protein: 7
-          }
-        ]
+      async initialize () {
+        const respone = await CategoryService.findAll()
+        this.desserts = respone.data
       },
-
       editItem (item) {
         this.editedIndex = this.desserts.indexOf(item)
         this.editedItem = Object.assign({}, item)
@@ -294,6 +213,8 @@
       },
 
       deleteItemConfirm () {
+        const id = this.desserts[this.editedIndex].id
+        ProductService.delete({data: {id: id}})
         this.desserts.splice(this.editedIndex, 1)
         this.closeDelete()
       },
@@ -313,14 +234,27 @@
           this.editedIndex = -1
         })
       },
-
-      save () {
-        if (this.editedIndex > -1) {
-          Object.assign(this.desserts[this.editedIndex], this.editedItem)
-        } else {
-          this.desserts.push(this.editedItem)
+      async save () {
+        this.$v.$touch()
+        if (!this.$v.$anyError) {
+          this.editedItem.CategoryId = this.editedItem.Category.id
+          const respone = await ProductService.save(this.editedItem)
+          console.log(respone)
+          if (this.editedIndex > -1) {
+            Object.assign(this.desserts[this.editedIndex], this.editedItem)
+          } else {
+            this.desserts.unshift(this.editedItem)
+          }
+          this.close()
         }
-        this.close()
+      },
+      clear () {
+        this.name = ''
+        this.phoneNumber = ''
+        this.email = ''
+        this.select = null
+        this.available = null
+        this.$refs.observer.reset()
       }
     }
   }

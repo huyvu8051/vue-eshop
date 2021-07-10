@@ -5,9 +5,9 @@ export default {
     return Api().get('product')
   },
   save (credentials) {
-    return Api().post('product', credentials)
-  },
-  update (credentials) {
+    if (credentials.id == null) {
+      return Api().post('product', credentials)
+    }
     return Api().put('product', credentials)
   },
   delete (credentials) {

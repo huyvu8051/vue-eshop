@@ -36,7 +36,7 @@
           :disabled="$v.$anyError"
           @click="submit"
         >
-          submit
+          <span id="submit">submit</span>
         </v-btn>
         <v-btn @click="clear"
           class="warning">
