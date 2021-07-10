@@ -42,7 +42,6 @@
                   <v-col
                     cols="12"
                     sm="6"
-                    md="6"
                   >
                     <v-text-field
                       v-model="editedItem.name"
@@ -57,7 +56,6 @@
                   <v-col
                     cols="12"
                     sm="6"
-                    md="6"
                   >
                     <v-switch
                       v-model="editedItem.available"

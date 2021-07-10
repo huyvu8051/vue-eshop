@@ -1,15 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import Login from '@/components/pages/Login'
-import TestLogin from '@/components/pages/TestLogin'
-import Admin from '@/views/admin/Admin'
+import Login from '@/views/Login'
+import Admin from '@/components/admin/Admin'
+import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
+import Details from '@/views/user/Details'
 import Product from '@/views/admin/Product'
-import Register from '@/components/Register'
-import Songs from '@/components/Songs'
-import Home from '@/components/Home'
-import CreateSong from '@/components/CreateSong'
-import CRUD from '@/components/CRUD'
+import Register from '@/views/Register'
+import Home from '@/views/Home'
 
 Vue.use(Router)
 
@@ -31,33 +29,8 @@ export default new Router({
       component: Login
     },
     {
-      path: '/testlogin',
-      name: 'testlogin',
-      component: TestLogin
-    },
-    {
       path: '/',
       name: 'home',
-      component: Home
-    },
-    {
-      path: '/songs',
-      name: 'songs',
-      component: Songs
-    },
-    {
-      path: '/songs/create',
-      name: 'songs-create',
-      component: CreateSong
-    },
-    {
-      path: '/crud',
-      name: 'crud',
-      component: CRUD
-    },
-    {
-      path: '/',
-      name: '*',
       component: Home
     },
     {
@@ -75,6 +48,19 @@ export default new Router({
           path: 'product',
           name: 'admin.product',
           component: Product
+        }
+      ]
+    },
+    {
+      path: '/user',
+      name: 'user',
+      component: User,
+      redirect: {path: '/user/details'},
+      children: [
+        {
+          path: 'details',
+          name: 'user.details',
+          component: Details
         }
       ]
     }
