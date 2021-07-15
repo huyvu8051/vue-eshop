@@ -25,14 +25,9 @@ fs
 db.sequelize = sequelize
 db.Sequelize = Sequelize
 
-db.Song = require('./Song') (sequelize, Sequelize)
-db.Artist = require('./Artist') (sequelize, Sequelize)
 db.Product = require('./Product') (sequelize, Sequelize)
 db.Category = require('./Category') (sequelize, Sequelize)
 db.Role = require('./Role') (sequelize, Sequelize)
-
-db.Artist.hasMany(db.Song)
-db.Song.belongsTo(db.Artist)
 
 db.Category.hasMany(db.Product)
 db.Product.belongsTo(db.Category)

@@ -5,11 +5,13 @@
         cols="12"
         sm="6"
         md="4"
+        lg="3"
+        xl="2"
         v-for="(item, index) in desserts" v-bind:key="index"
         >
         <v-card
           :loading="loading"
-          class="mx-auto my-12"
+          class="mx-auto my-5"
           max-width="374"
         >
           <template slot="progress">
@@ -22,7 +24,7 @@
 
           <v-img
             height="250"
-            src="https://cdn.vuetifyjs.com/images/cards/cooking.png"
+            src="@/assets/products/1.png"
           ></v-img>
 
           <v-card-title>{{item.name}}</v-card-title>
@@ -42,7 +44,7 @@
               ></v-rating>
 
               <div class="grey--text ms-4">
-                4.5 (413)
+                {{formatPrice(item.price)}}
               </div>
             </v-row>
 
@@ -50,28 +52,10 @@
               {{item.Category.name}}
             </div>
 
-            <div>{{item.detail}} Lorem ipsum dolor, sit amet consectetur adipisicing elit. Error, distinctio. Tempore mollitia itaque sunt, commodi nulla nisi, voluptate magnam ipsa vero dolorem animi blanditiis accusamus expedita quibusdam nihil quod ratione.</div>
+            <div>{{item.detail.slice(0, 100)}}...</div>
           </v-card-text>
 
           <v-divider class="mx-4"></v-divider>
-
-          <v-card-title>Tonight's availability</v-card-title>
-
-          <v-card-text>
-            <v-chip-group
-              v-model="selection"
-              active-class="deep-purple accent-4 white--text"
-              column
-            >
-              <v-chip>5:30PM</v-chip>
-
-              <v-chip>7:30PM</v-chip>
-
-              <v-chip>8:00PM</v-chip>
-
-              <v-chip>9:00PM</v-chip>
-            </v-chip-group>
-          </v-card-text>
 
           <v-card-actions>
             <v-btn
@@ -115,6 +99,9 @@
       reserve () {
         this.loading = true
         setTimeout(() => (this.loading = false), 2000)
+      },
+      formatPrice (price) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
       }
     }
   }

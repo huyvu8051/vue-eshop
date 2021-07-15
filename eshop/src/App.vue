@@ -1,6 +1,6 @@
 <template>
   <v-app>
-    <v-parallax src="https://cdn.vuetifyjs.com/images/parallax/material.jpg">
+    <v-parallax src="https://images.ctfassets.net/x7j9qwvpvr5s/3xNT0kQMJohxdIDIEAGrXZ/8d4028700ec535532a3254d95c8ae0c5/Diavel-1260-BYG-03-hero-1600x1000.jpg">
       <v-row
         align="center"
         justify="center"

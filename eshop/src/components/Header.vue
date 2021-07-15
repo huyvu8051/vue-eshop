@@ -7,6 +7,10 @@
         <span class="font-weight-light">E</span>
         <span>Shop</span>
       </v-toolbar-title>
+      <v-btn text color="grey" :to="{name: 'home'}">
+        <span>Home</span>
+        <v-icon right>home</v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
       <v-btn text color="grey" v-if="!$store.state.isUserLoggedIn" :to="{name: 'login'}">
         <span>Sign in</span>
@@ -16,7 +20,7 @@
         <span>Sign up</span>
         <v-icon right>how_to_reg</v-icon>
       </v-btn>
-      <v-btn text color="grey" v-if="$store.state.isUserLoggedIn" :to="{name: 'userDetail'}">
+      <v-btn text color="grey" v-if="$store.state.isUserLoggedIn" :to="{name: 'user.details'}">
         <span>Hi!</span>
         <v-icon right>account_box</v-icon>
       </v-btn>
