@@ -28,10 +28,16 @@ db.Sequelize = Sequelize
 db.Product = require('./Product') (sequelize, Sequelize)
 db.Category = require('./Category') (sequelize, Sequelize)
 db.Role = require('./Role') (sequelize, Sequelize)
+db.Order = require('./Order') (sequelize, Sequelize)
+db.OrderDetails = require('./OrderDetails') (sequelize, Sequelize)
 
 db.Category.hasMany(db.Product)
 db.Product.belongsTo(db.Category)
 
+db.User.hasMany(db.Order)
+db.Order.belongsTo(db.User)
+
+// userRole
 db.User.belongsToMany(db.Role, {
     through: "User_Role"
 })
@@ -39,6 +45,12 @@ db.Role.belongsToMany(db.User, {
     through: "User_Role"
 })
 
+// orderDetails
+db.Product.hasMany(db.OrderDetails)
+db.User.hasMany(db.OrderDetails)
+
+db.OrderDetails.belongsTo(db.Product)
+db.OrderDetails.belongsTo(db.User)
 
 console.log('dir: ', __dirname)
 module.exports = db

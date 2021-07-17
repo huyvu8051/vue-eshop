@@ -126,8 +126,8 @@
   </v-data-table>
 </template>
 <script>
-  import ProductService from '@/services/ProductService'
-  import CategoryService from '@/services/CategoryService'
+  import ProductService from '@/services/admin/ProductService'
+  import CategoryService from '@/services/admin/CategoryService'
   import { validationMixin } from 'vuelidate'
   import { required, maxLength } from 'vuelidate/lib/validators'
   export default {

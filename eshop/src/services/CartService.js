@@ -1,7 +1,7 @@
 import Api from '@/services/Api'
 
 export default {
-  findOneById (credentials) {
+  addProduct (credentials) {
     return Api().post('productDetails', credentials)
   }
 }

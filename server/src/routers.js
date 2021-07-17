@@ -1,7 +1,8 @@
 const AuthenticationController = require('./controllers/AuthenticationController')
 const AuthenticationControllerPolicy = require('./policies/AuthenticationControllerPolicy')
+const AdminProductController = require('./controllers/AdminProductController')
 const ProductController = require('./controllers/ProductController')
-const CategoryController = require('./controllers/CategoryController')
+const CategoryController = require('./controllers/AdminCategoryController')
 const AuthorizationController = require('./controllers/AuthorizationController')
 
 module.exports = (app) => {
@@ -16,34 +17,31 @@ module.exports = (app) => {
     app.get('/product',
     ProductController.findAll)
     
-    app.post('/product',
-    ProductController.create)
-    app.put('/product',
-    ProductController.update)
-    app.delete('/product',
-    ProductController.delete)
+    app.post('/productDetails',
+    ProductController.findOneById)
+
 
     // admin
 
     app.get('/admin/product',
     AuthorizationController.verifyToken,
     AuthorizationController.isAdmin,
-    ProductController.findAll)
+    AdminProductController.findAll)
     
     app.post('/admin/product',
     AuthorizationController.verifyToken,
     AuthorizationController.isAdmin,
-    ProductController.create)
+    AdminProductController.create)
 
     app.put('/admin/product',
     AuthorizationController.verifyToken,
     AuthorizationController.isAdmin,
-    ProductController.update)
+    AdminProductController.update)
 
     app.delete('/admin/product',
     AuthorizationController.verifyToken,
     AuthorizationController.isAdmin,
-    ProductController.delete)
+    AdminProductController.delete)
 
     // category router
 

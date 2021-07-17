@@ -1,73 +1,104 @@
 <template>
   <div>
     <v-row>
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-        lg="3"
-        xl="2"
-        v-for="(item, index) in desserts" v-bind:key="index"
-        >
-        <v-card
-          :loading="loading"
-          class="mx-auto my-5"
-          max-width="374"
-        >
-          <template slot="progress">
-            <v-progress-linear
-              color="deep-purple"
-              height="10"
-              indeterminate
-            ></v-progress-linear>
-          </template>
+        <v-col
+          cols="12"
+          sm="6"
+          md="4"
+          lg="3"
+          xl="2"
+          v-for="(item, index) in desserts" v-bind:key="index"
+          >
+          <v-card
+            class="mx-auto my-5"
+            max-width="374"
+          >
+            <template slot="progress">
+              <v-progress-linear
+                color="deep-purple"
+                height="10"
+                indeterminate
+              ></v-progress-linear>
+            </template>
+            <router-link
+              :to="{
+                name: 'productDetails',
+                params: { id: item.id }
+              }">
+              <v-img
+                height="250"
+                :src="require(`@/assets/products/${item.img}`)"
+              ></v-img>
+            </router-link>
+            <router-link
+              :to="{
+                name: 'productDetails',
+                params: { id: item.id }
+              }"
+              style="text-decoration: none">
+              <v-card-title>{{item.name}}</v-card-title>
+            </router-link>
+            <v-card-text>
+              <v-row
+                align="center"
+                class="mx-0"
+              >
+                <v-rating
+                  :value="4.5"
+                  color="amber"
+                  dense
+                  half-increments
+                  readonly
+                  size="14"
+                ></v-rating>
 
-          <v-img
-            height="250"
-            src="@/assets/products/1.png"
-          ></v-img>
+                <div class="grey--text ms-4">
+                  {{formatPrice(item.price)}}
+                </div>
+              </v-row>
 
-          <v-card-title>{{item.name}}</v-card-title>
-
-          <v-card-text>
-            <v-row
-              align="center"
-              class="mx-0"
-            >
-              <v-rating
-                :value="4.5"
-                color="amber"
-                dense
-                half-increments
-                readonly
-                size="14"
-              ></v-rating>
-
-              <div class="grey--text ms-4">
-                {{formatPrice(item.price)}}
+              <div class="my-4 text-subtitle-1">
+                {{item.Category.name}}
               </div>
-            </v-row>
+              <router-link
+              :to="{
+                name: 'productDetails',
+                params: { id: item.id }
+              }"
+              style="text-decoration: none;
+              color: grey;">
+                <div>{{item.detail.slice(0, 100)}}...</div>
+              </router-link>
+            </v-card-text>
 
-            <div class="my-4 text-subtitle-1">
-              {{item.Category.name}}
-            </div>
+            <v-divider class="mx-4"></v-divider>
 
-            <div>{{item.detail.slice(0, 100)}}...</div>
-          </v-card-text>
-
-          <v-divider class="mx-4"></v-divider>
-
-          <v-card-actions>
-            <v-btn
-              color="deep-purple lighten-2"
-              text
-              @click="reserve"
-            >
-              Reserve
-            </v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+            <v-card-actions class="mx-4">
+              <v-btn
+                color="light-blue"
+                dark
+                rounded
+                depressed
+                @click="addToCart(item.id)"
+              >
+                <v-icon>
+                  add_shopping_cart
+                </v-icon>
+              </v-btn>
+              <v-btn
+                color="pink"
+                dark
+                rounded
+                depressed
+                @click="addToFavorite(item.id)"
+              >
+                <v-icon>
+                  favorite_border
+                </v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-col>
     </v-row>
     <div class="text-center">
       <v-pagination
@@ -80,7 +111,7 @@
 </template>
 
 <script>
-  import ProductService from '@/services/ProductService'
+  import ProductService from '@/services/admin/ProductService'
   export default {
     data: () => ({
       loading: false,
@@ -96,12 +127,11 @@
         const respone = await ProductService.findAll()
         this.desserts = respone.data
       },
-      reserve () {
-        this.loading = true
-        setTimeout(() => (this.loading = false), 2000)
-      },
       formatPrice (price) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+      },
+      addToCart (id) {
+        this.$cookie.set('concu', id)
       }
     }
   }

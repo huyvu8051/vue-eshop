@@ -4,10 +4,11 @@ import Login from '@/views/Login'
 import Admin from '@/components/admin/Admin'
 import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
-import Details from '@/views/user/Details'
+import UserDetails from '@/views/user/Details'
 import Product from '@/views/admin/Product'
 import Register from '@/views/Register'
 import Home from '@/views/Home'
+import ProductDetails from '@/views/ProductDetails'
 
 Vue.use(Router)
 
@@ -34,6 +35,15 @@ export default new Router({
       component: Home
     },
     {
+      path: '/details/:id',
+      name: 'productDetails',
+      props: true,
+      component: ProductDetails
+    },
+
+    // admin
+
+    {
       path: '/admin',
       name: 'admin',
       component: Admin,
@@ -51,6 +61,9 @@ export default new Router({
         }
       ]
     },
+
+    // user
+
     {
       path: '/user',
       name: 'user',
@@ -60,7 +73,7 @@ export default new Router({
         {
           path: 'details',
           name: 'user.details',
-          component: Details
+          component: UserDetails
         }
       ]
     }
