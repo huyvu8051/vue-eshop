@@ -1,6 +1,22 @@
 const {Product, Category} = require('../models')
 
 module.exports = {
+  async findAllByArrayId (req, res) {
+    try {
+      const products = await Product.findAll(
+        { 
+          where: {
+            id: req.body.ids
+          }
+        })
+      res.send(products)
+    } catch (err) {
+      console.log('============get all products err:', err)
+      res.status(400).send({
+        error: 'this req is error'
+      })
+    }
+  },
   async findAll (res) {
     try {
       const products = await Product.findAll(

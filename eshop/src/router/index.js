@@ -1,10 +1,13 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
+import convert from '@/views/ConvertCurrency'
 import Admin from '@/components/admin/Admin'
 import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
 import UserDetails from '@/views/user/Details'
+import UserCart from '@/views/user/ShoppingCart'
+import UserOrder from '@/views/user/Order'
 import Product from '@/views/admin/Product'
 import Register from '@/views/Register'
 import Home from '@/views/Home'
@@ -23,6 +26,11 @@ export default new Router({
       path: '/register',
       name: 'register',
       component: Register
+    },
+    {
+      path: '/convert',
+      name: 'convert',
+      component: convert
     },
     {
       path: '/login',
@@ -74,6 +82,16 @@ export default new Router({
           path: 'details',
           name: 'user.details',
           component: UserDetails
+        },
+        {
+          path: 'cart',
+          name: 'user.cart',
+          component: UserCart
+        },
+        {
+          path: 'order',
+          name: 'user.order',
+          component: UserOrder
         }
       ]
     }

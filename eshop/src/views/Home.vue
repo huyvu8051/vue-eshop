@@ -112,6 +112,7 @@
 
 <script>
   import ProductService from '@/services/admin/ProductService'
+  import CartService from '@/services/CartService'
   export default {
     data: () => ({
       loading: false,
@@ -131,7 +132,8 @@
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
       },
       addToCart (id) {
-        this.$cookie.set('concu', id)
+        CartService.addProduct(id)
+        this.$eventBus.$emit('updateCart')
       }
     }
   }

@@ -20,6 +20,9 @@ module.exports = (app) => {
     app.post('/productDetails',
     ProductController.findOneById)
 
+    app.post('/cart',
+    ProductController.findAllByArrayId)
+
 
     // admin
 
