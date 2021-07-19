@@ -28,14 +28,24 @@ export default {
       product.quantity++
     }
     VueCookies.set('cartCookies', cartCookies)
-    // console.log('cartService product list: ', cartCookies.productList)
+    console.log('cartService get cart: ', cartCookies)
   },
   deleteProduct (credentials) {
     cartCookies.productList = cartCookies.productList.filter(item => item.id !== credentials)
     VueCookies.set('cartCookies', cartCookies)
   },
   changeProductQuantity (credentials) {
-    console.log(credentials)
+    let productList = []
+    credentials.productList.forEach(element => {
+      productList.push({
+        id: element.id,
+        quantity: element.quantity
+      })
+    })
+    console.log('cartService get cart: ', productList)
+    VueCookies.set('cartCookies', JSON.stringify({
+      productList: productList
+    }))
   },
   findAllByArrayId (credentials) {
     return Api().post('cart', credentials)

@@ -6,7 +6,6 @@ import Admin from '@/components/admin/Admin'
 import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
 import UserDetails from '@/views/user/Details'
-import UserCart from '@/views/user/ShoppingCart'
 import UserOrder from '@/views/user/Order'
 import Product from '@/views/admin/Product'
 import Register from '@/views/Register'
@@ -86,7 +85,7 @@ export default new Router({
         {
           path: 'cart',
           name: 'user.cart',
-          component: UserCart
+          component: UserOrder
         },
         {
           path: 'order',

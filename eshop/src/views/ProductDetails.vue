@@ -3,7 +3,7 @@
     <v-row class="justify-center">
       <v-col
         cols="12"
-        md="6"
+        md="8"
         class="d-flex"
         style="flex-direction:column"
         >
@@ -14,7 +14,7 @@
       </v-col>
       <v-col
         cols="12"
-        md="6"
+        md="4"
         class="d-flex"
         style="flex-direction:column"
         >

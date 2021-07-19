@@ -109,7 +109,7 @@
           this.$store.dispatch('setSignature', response.data.signature)
           console.log(Store.state)
           this.$router.push({
-            name: 'admin.product'
+            name: 'home'
           })
         } catch (error) {
           this.error = error

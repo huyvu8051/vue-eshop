@@ -7,7 +7,6 @@
       <v-data-table
       :headers="headers"
       :items="desserts"
-      sort-by="calories"
       class="elevation-1"
       disable-pagination
       hide-default-footer
@@ -35,6 +34,16 @@
               </v-card>
             </v-dialog>
           </v-toolbar>
+        </template>
+        <template v-slot:[`item.quantity`]="{ item }">
+          <v-text-field
+            v-model="item.quantity"
+            type="number"
+            @input="updateCart">
+          </v-text-field>
+        </template>
+        <template v-slot:[`item.total`]="{ item }">
+          {{item.product.price * item.quantity}}
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -67,7 +76,7 @@
               dark
               rounded
               depressed
-              :to="{name: 'user.order'}"
+              @click="order"
             >
               Order
               <v-icon right>
@@ -95,6 +104,7 @@ export default {
       },
       { text: 'Price(đ)', value: 'product.price' },
       { text: 'Quantity', value: 'quantity' },
+      { text: 'Total', value: 'total' },
       // { text: 'Img', sortable: false, value: 'product.img' },
       { text: 'Actions', value: 'actions', sortable: false }
     ],
@@ -131,6 +141,14 @@ export default {
   },
 
   methods: {
+    updateCart () {
+      CartService.changeProductQuantity({
+        productList: this.desserts
+      })
+    },
+    order () {
+      this.$eventBus.$emit('nextStep')
+    },
     async initialize () {
       let cart = CartService.getCart()
       let ids = []
