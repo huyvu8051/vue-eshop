@@ -5,6 +5,11 @@ const ProductController = require('./controllers/ProductController')
 const CategoryController = require('./controllers/AdminCategoryController')
 const AuthorizationController = require('./controllers/AuthorizationController')
 
+const UserOrderController = require('./controllers/user/OrderController')
+const AdminOrderController = require('./controllers/admin/OrderController')
+const AdminUserController = require('./controllers/admin/UserController')
+const UserOrderDetailsController = require('./controllers/user/OrderDetailsController')
+
 module.exports = (app) => {
     app.post('/register',
     AuthenticationControllerPolicy.register,
@@ -46,11 +51,28 @@ module.exports = (app) => {
     AuthorizationController.isAdmin,
     AdminProductController.delete)
 
-    // category router
-
     app.get('/admin/category',
     CategoryController.findAll)
+
     app.post('/admin/category',
     CategoryController.create)
+
+    app.get('/admin/order',
+    AdminOrderController.findAll)
+
+    app.get('/admin/user',
+    AdminUserController.findAll)
+
+    app.get('/user/order',
+    AuthorizationController.verifyToken,
+    UserOrderController.findAll)
+
+    app.post('/user/order',
+    AuthorizationController.verifyToken,
+    UserOrderController.create)
+
+    app.get('/user/orderDetails',
+    AuthorizationController.verifyToken,
+    UserOrderDetailsController.findOneById)
 }
 

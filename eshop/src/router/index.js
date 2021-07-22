@@ -5,8 +5,11 @@ import convert from '@/views/ConvertCurrency'
 import Admin from '@/components/admin/Admin'
 import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
+import AdminOrder from '@/views/admin/Order'
+import AdminUser from '@/views/admin/User'
 import UserDetails from '@/views/user/Details'
 import UserOrder from '@/views/user/Order'
+import UserCart from '@/views/user/ShoppingCart'
 import Product from '@/views/admin/Product'
 import Register from '@/views/Register'
 import Home from '@/views/Home'
@@ -65,6 +68,16 @@ export default new Router({
           path: 'product',
           name: 'admin.product',
           component: Product
+        },
+        {
+          path: 'order',
+          name: 'admin.order',
+          component: AdminOrder
+        },
+        {
+          path: 'user',
+          name: 'admin.user',
+          component: AdminUser
         }
       ]
     },
@@ -85,7 +98,7 @@ export default new Router({
         {
           path: 'cart',
           name: 'user.cart',
-          component: UserOrder
+          component: UserCart
         },
         {
           path: 'order',

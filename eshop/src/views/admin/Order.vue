@@ -48,7 +48,7 @@
   </v-data-table>
 </template>
 <script>
-  import OrderService from '@/services/user/OrderService'
+  import OrderService from '@/services/Admin/OrderService'
   export default {
     data () {
       return {
@@ -61,6 +61,7 @@
             sortable: false,
             value: 'id'
           },
+          { text: 'Email', sortable: false, value: 'email' },
           { text: 'Status', sortable: false, value: 'status' },
           { text: 'Create At', sortable: false, value: 'createdAt' },
           { text: 'Shipping Address', sortable: false, value: 'shipping_address' },
@@ -82,9 +83,7 @@
       }
     },
     created () {
-      setTimeout(() => {
       this.initialization()
-      }, 1000)
     },
     methods: {
       async initialization () {

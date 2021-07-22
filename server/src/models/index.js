@@ -47,10 +47,11 @@ db.Role.belongsToMany(db.User, {
 
 // orderDetails
 db.Product.hasMany(db.OrderDetails)
-db.User.hasMany(db.OrderDetails)
 
 db.OrderDetails.belongsTo(db.Product)
-db.OrderDetails.belongsTo(db.User)
+db.OrderDetails.belongsTo(db.Order)
+
+db.Order.hasMany(db.OrderDetails)
 
 console.log('dir: ', __dirname)
 module.exports = db

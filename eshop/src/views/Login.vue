@@ -1,7 +1,8 @@
 <template>
   <v-container>
     <Panel title="Login">
-      <form>
+      <v-form
+        @submit.prevent="submit">
         <v-text-field
           v-model="email"
           :error-messages="emailErrors"
@@ -30,7 +31,7 @@
           class="warning">
           <span>clear</span>
         </v-btn>
-      </form>
+      </v-form>
     </Panel>
   </v-container>
 </template>

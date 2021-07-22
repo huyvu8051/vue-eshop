@@ -123,7 +123,9 @@ export default {
       drawer: false,
       links: [
         {icon: 'inventory_2', text: 'Product', route: '/admin/product'},
-        {icon: 'category', text: 'Category', route: '/admin/category'}
+        {icon: 'category', text: 'Category', route: '/admin/category'},
+        {icon: 'category', text: 'Order', route: '/admin/order'},
+        {icon: 'group', text: 'User', route: '/admin/user'}
       ],
       email: '',
       cart: {

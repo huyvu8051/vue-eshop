@@ -1,6 +1,6 @@
 import VueCookies from 'vue-cookies'
 import Api from '@/services/Api'
-VueCookies.config(60 * 60)
+VueCookies.config(60 * 60 * 2)
 
 var cartCookies = VueCookies.get('cartCookies')
 if (!cartCookies) {
@@ -11,6 +11,11 @@ if (!cartCookies) {
 }
 
 export default {
+  removeCart () {
+    VueCookies.set('cartCookies', {
+      productList: []
+    })
+  },
   getCart () {
     return VueCookies.get('cartCookies')
   },
