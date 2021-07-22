@@ -112,23 +112,14 @@
                     sm="6"
                     md="4"
                   >
-                    <v-text-field
-                      v-model="editedItem.img"
-                      label="PICTURE (url)"
-                    ></v-text-field>
+                    <input type="file" @change="previewFiles" multiple>
                   </v-col>
                   <v-col
                     cols="12"
                     sm="12"
                     md="12"
                   >
-                   <v-textarea
-                    v-model="editedItem.detail"
-                    name="input-7-1"
-                    label="Details"
-                    value="This is details"
-                    hint="Text something!"
-                  ></v-textarea>
+                    <ckeditor v-model="editedItem.detail"></ckeditor>
                   </v-col>
                 </v-row>
               </v-container>
@@ -196,6 +187,7 @@
 <script>
   import ProductService from '@/services/admin/ProductService'
   import CategoryService from '@/services/admin/CategoryService'
+  import UploadService from '@/services/UploadService'
   import { validationMixin } from 'vuelidate'
   import { required, maxLength } from 'vuelidate/lib/validators'
   export default {
@@ -210,6 +202,7 @@
       }
     },
     data: () => ({
+      selectedFile: null,
       categories: [],
       dialog: false,
       dialogDelete: false,
@@ -298,6 +291,19 @@
     },
 
     methods: {
+      async onUpload () {
+        let formData = new FormData()
+        formData.append('file', this.selectedFile)
+        try {
+          await UploadService.upload(formData)
+        } catch (error) {
+          console.log(error)
+        }
+      },
+      previewFiles (event) {
+        console.log(event.target.files)
+        this.selectedFile = event.target.files[0]
+      },
       async initialize () {
         const respone = await ProductService.findAll()
         this.desserts = respone.data
@@ -344,6 +350,7 @@
       async save () {
         this.$v.$touch()
         if (!this.$v.$anyError) {
+          this.onUpload()
           this.editedItem.CategoryId = this.editedItem.Category.id
           const respone = await ProductService.save(this.editedItem)
           console.log(respone)

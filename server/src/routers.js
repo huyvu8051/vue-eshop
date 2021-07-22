@@ -5,6 +5,8 @@ const ProductController = require('./controllers/ProductController')
 const CategoryController = require('./controllers/AdminCategoryController')
 const AuthorizationController = require('./controllers/AuthorizationController')
 
+const UploadFileController = require('./controllers/UploadFileController')
+
 const UserOrderController = require('./controllers/user/OrderController')
 const AdminOrderController = require('./controllers/admin/OrderController')
 const AdminUserController = require('./controllers/admin/UserController')
@@ -74,5 +76,10 @@ module.exports = (app) => {
     app.get('/user/orderDetails',
     AuthorizationController.verifyToken,
     UserOrderDetailsController.findOneById)
+
+    app.post('/upload',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
+    UploadFileController.saveFile)
 }
 

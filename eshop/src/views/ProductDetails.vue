@@ -87,7 +87,7 @@
             {{product.name}}
           </div>
 
-          <div>{{product.detail}}</div>
+          <div v-html="product.detail"></div>
         </v-card-text>
       </v-col>
     </v-row>

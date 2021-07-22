@@ -3,9 +3,6 @@ const {Product, Category} = require('../models')
 module.exports = {
   async findAll (req, res) {
     try {
-      if (req) {
-        console.log('cc')
-      }
       const categories = await Category.findAll()
       res.send(categories)
     } catch (err) {
@@ -28,5 +25,10 @@ module.exports = {
         error: 'this req is error'
       })
     }
+  },
+
+  async saveFile (req, res) {
+    console.log('--------------', req)
+    res.send('concu')
   }
 }
