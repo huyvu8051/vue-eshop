@@ -6,8 +6,6 @@
     :expanded.sync="expanded"
     item-key="id"
     show-expand
-    disable-pagination
-    hide-default-footer
     class="elevation-1"
   >
     <template v-slot:top>
@@ -15,12 +13,47 @@
         <v-toolbar-title>Order</v-toolbar-title>
       </v-toolbar>
     </template>
+    <template v-slot:[`item.status`]="{ item }">
+      <v-chip
+        class="ma-2"
+        color="orange"
+        text-color="white"
+        v-if="item.status === 'progress'"
+      >
+        Progress
+        <v-icon right>
+          done
+        </v-icon>
+      </v-chip>
+      <v-chip
+        class="ma-2"
+        color="green"
+        text-color="white"
+        v-if="item.status === 'done'"
+      >
+        Done
+        <v-icon right>
+          mdi-checkbox-marked-circle
+        </v-icon>
+      </v-chip>
+      <v-chip
+        class="ma-2"
+        color="red"
+        text-color="white"
+        v-if="item.status === 'reject'"
+      >
+        Rejected
+        <v-icon right>
+          unpublished
+        </v-icon>
+      </v-chip>
+    </template>
     <template v-slot:expanded-item="{ headers, item }">
       <td :colspan="headers.length">
         <v-data-table
           :headers="orderDetail_header"
           :items="item.OrderDetails"
-          class="elevation-1"
+          class="elevation-1 mt-4"
           disable-pagination
           hide-default-footer
         >
@@ -28,6 +61,9 @@
             <v-toolbar flat>
               <v-toolbar-title>Order Details</v-toolbar-title>
             </v-toolbar>
+          </template>
+          <template v-slot:[`item.price`]="{ item }">
+            {{formatPrice (item.price)}}
           </template>
           <template v-slot:[`item.img`]="{ item }">
             <v-img
@@ -38,16 +74,16 @@
             ></v-img>
           </template>
           <template v-slot:[`item.total`]="{ item }">
-            {{item.price * item.quantity}}
+            {{formatPrice (item.price * item.quantity)}}
           </template>
         </v-data-table>
-        <div class="text-center pt-2">
+        <div class="text-center pt-3">
           <v-row>
             <v-col>
 
             </v-col>
-            <v-col>
-              <p>Total: {{total(item)}}</p>
+            <v-col class="mb-5">
+              <h3>Total: {{formatPrice (total(item))}}</h3>
             </v-col>
           </v-row>
         </div>
@@ -63,29 +99,17 @@
         expanded: [],
         singleExpand: true,
         dessertHeaders: [
-          {
-            text: 'Id',
-            align: 'start',
-            sortable: false,
-            value: 'id'
-          },
-          { text: 'Status', sortable: false, value: 'status' },
           { text: 'Create At', sortable: false, value: 'createdAt' },
           { text: 'Shipping Address', sortable: false, value: 'shipping_address' },
+          { text: 'Status', sortable: false, value: 'status' },
           { text: '', value: 'data-table-expand' }
         ],
         orderDetail_header: [
-          {
-            text: 'id',
-            align: 'start',
-            sortable: false,
-            value: 'id'
-          },
           { text: 'Product name', sortable: false, value: 'Product.name' },
           { text: 'price', sortable: false, value: 'price' },
           { text: 'quantity', sortable: false, value: 'quantity' },
           { text: 'Image', sortable: false, value: 'img' },
-          { text: 'Subtotal', value: 'total' }
+          { text: 'Subtotal', sortable: false, value: 'total' }
         ],
         desserts: []
       }
@@ -96,6 +120,9 @@
       }, 300)
     },
     methods: {
+      formatPrice (price) {
+        return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+      },
       async initialization () {
         let res = await OrderService.findAll()
         this.desserts = res.data

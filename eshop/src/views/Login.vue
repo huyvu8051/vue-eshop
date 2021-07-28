@@ -103,14 +103,14 @@
             email: this.email,
             password: this.password
           })
-          console.log('response==========', response)
+          // console.log('response==========', response)
           this.$store.dispatch('setToken', response.data.token)
           this.$store.dispatch('setEmail', response.data.email)
           this.$store.dispatch('setRoles', response.data.roles)
           this.$store.dispatch('setSignature', response.data.signature)
           console.log(Store.state)
           this.$router.push({
-            name: 'user'
+            name: 'home'
           })
         } catch (error) {
           this.error = error

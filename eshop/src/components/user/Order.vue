@@ -12,8 +12,11 @@
         disable-pagination
         hide-default-footer
       >
+        <template v-slot:[`item.product.price`]="{ item }">
+          {{formatPrice (item.product.price)}}
+        </template>
         <template v-slot:[`item.total`]="{ item }">
-          {{item.product.price * item.quantity}}
+          {{formatPrice (item.product.price * item.quantity)}}
         </template>
         <template v-slot:no-data>
           <v-btn color="primary" @click="initialize"> Reset </v-btn>
@@ -28,7 +31,7 @@
         class="mx-auto"
         tile
       >
-        <v-subheader>REPORTS</v-subheader>
+        <v-subheader>ORDER</v-subheader>
 
         <v-list-item two-line>
           <v-list-item-content>
@@ -45,7 +48,7 @@
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Total price</v-list-item-title>
-            <v-list-item-subtitle>{{totalPrice}}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{formatPrice (totalPrice)}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider class="mx-4"></v-divider>
@@ -125,6 +128,9 @@ export default {
     this.initializeEmail()
   },
   methods: {
+    formatPrice (price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+    },
     confirmOrder () {
       let cart = CartService.getCart()
       let orderData = {

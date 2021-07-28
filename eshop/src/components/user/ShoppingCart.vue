@@ -35,17 +35,45 @@
             </v-dialog>
           </v-toolbar>
         </template>
+        <template v-slot:[`item.image`]="{ item }">
+          <v-img
+            max-height="50"
+            width="100"
+            :src="$baseurl + 'uploads/' + item.product.img"
+            class="ma-3"
+          ></v-img>
+        </template>
+        <template v-slot:[`item.product.price`]="{ item }">
+          {{formatPrice(item.product.price)}}
+        </template>
+        <template v-slot:[`item.minus`]="{ item }">
+          <v-btn
+            class="mx-2"
+            small
+            @click="item.quantity--; updateCart()"
+            v-if="item.quantity > 1"
+          >
+            <v-icon dark>
+              mdi-minus
+            </v-icon>
+          </v-btn>
+        </template>
         <template v-slot:[`item.quantity`]="{ item }">
-          <v-text-field
-            v-model="item.quantity"
-            type="number"
-            min="1"
-            disable
-            @input="updateCart">
-          </v-text-field>
+          {{item.quantity}}
+        </template>
+        <template v-slot:[`item.add`]="{ item }">
+          <v-btn
+            class="mx-2"
+            small
+            @click="item.quantity++; updateCart()"
+          >
+            <v-icon dark>
+              mdi-plus
+            </v-icon>
+          </v-btn>
         </template>
         <template v-slot:[`item.total`]="{ item }">
-          {{item.product.price * item.quantity}}
+          {{formatPrice(item.product.price * item.quantity)}}
         </template>
         <template v-slot:[`item.actions`]="{ item }">
           <v-icon small @click="deleteItem(item)"> mdi-delete </v-icon>
@@ -64,11 +92,10 @@
         tile
       >
         <v-subheader>REPORTS</v-subheader>
-
         <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>Total price</v-list-item-title>
-            <v-list-item-subtitle>{{totalPrice}}</v-list-item-subtitle>
+            <v-list-item-subtitle>{{formatPrice(totalPrice)}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-divider class="mx-4"></v-divider>
@@ -79,6 +106,7 @@
               rounded
               depressed
               @click="order"
+              v-if="checkOrderStatus"
             >
               Order
               <v-icon right>
@@ -104,8 +132,15 @@ export default {
         sortable: false,
         value: 'product.name'
       },
+      {
+        text: 'Image',
+        sortable: false,
+        value: 'image'
+      },
       { text: 'Price(đ)', value: 'product.price' },
+      { text: '', value: 'minus' },
       { text: 'Quantity', value: 'quantity' },
+      { text: '', value: 'add' },
       { text: 'Total', value: 'total' },
       // { text: 'Img', sortable: false, value: 'product.img' },
       { text: 'Actions', value: 'actions', sortable: false }
@@ -114,6 +149,13 @@ export default {
   }),
 
   computed: {
+    checkOrderStatus () {
+      if (this.desserts.length === 0) {
+        return false
+      } else {
+        return true
+      }
+    },
     quantityErrors () {
       const errors = []
       if (!this.$v.name.$dirty) return errors
@@ -143,6 +185,9 @@ export default {
   },
 
   methods: {
+    formatPrice (price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+    },
     updateCart () {
       CartService.changeProductQuantity({
         productList: this.desserts

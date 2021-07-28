@@ -6,14 +6,12 @@
     :expanded.sync="expanded"
     item-key="id"
     show-expand
-    disable-pagination
-    hide-default-footer
     class="elevation-1"
   >
     <template v-slot:[`item.status`]="{ item }">
       <v-select
         @change="updateStatus(item.id, item.status)"
-        :items="[true, false]"
+        :items="['progress', 'done', 'reject']"
         v-model="item.status"
       ></v-select>
     </template>
@@ -77,9 +75,9 @@
             value: 'id'
           },
           { text: 'Email', sortable: false, value: 'email' },
-          { text: 'Status', sortable: false, value: 'status' },
           { text: 'Create At', sortable: false, value: 'createdAt' },
           { text: 'Shipping Address', sortable: false, value: 'shipping_address' },
+          { text: 'Status', sortable: false, value: 'status' },
           { text: '', value: 'data-table-expand' }
         ],
         orderDetail_header: [

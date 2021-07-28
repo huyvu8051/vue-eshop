@@ -8,7 +8,7 @@ module.exports = (sequelize, DataTypes) => {
     amount: DataTypes.DOUBLE,
     shipping_address: DataTypes.STRING,
     email: DataTypes.STRING,
-    status: DataTypes.BOOLEAN
+    status: DataTypes.ENUM('progress', 'done', 'reject')
   })
   return Order
 }

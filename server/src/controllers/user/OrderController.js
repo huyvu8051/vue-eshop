@@ -9,7 +9,7 @@ module.exports = {
         { 
           shipping_address: req.body.shippingInfo.shipping_address,
           email: user.email,
-          status: false,
+          status: 'progress',
           UserId: user.id
         })
       console.log(order)

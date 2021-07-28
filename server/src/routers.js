@@ -67,18 +67,28 @@ module.exports = (app) => {
     AdminProductController.delete)
 
     app.get('/admin/category',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
     CategoryController.findAll)
 
     app.post('/admin/category',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
     CategoryController.create)
 
     app.get('/admin/order',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
     AdminOrderController.findAll)
 
     app.put('/admin/order',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
     AdminOrderController.updateStatus)
 
     app.get('/admin/user',
+    AuthorizationController.verifyToken,
+    AuthorizationController.isAdmin,
     AdminUserController.findAll)
 
     // user

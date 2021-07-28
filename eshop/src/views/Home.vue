@@ -1,5 +1,23 @@
 <template>
   <div>
+    <v-parallax src="https://images.ctfassets.net/x7j9qwvpvr5s/5ZPzfVLfeivYeodLWhJqXB/8f5b7576822717bdfeb9328167a757c9/Panigale-V2-TB-02--hero-1600x1000.jpg">
+      <v-row
+        align="center"
+        justify="center"
+      >
+        <v-col
+          class="text-center"
+          cols="12"
+        >
+          <h1 class="text-h4 font-weight-thin mb-4">
+            Vue Eshop
+          </h1>
+          <h4 class="subheading">
+            Buying Your Dream Bike Today!
+          </h4>
+        </v-col>
+      </v-row>
+    </v-parallax>
     <v-row>
         <v-col
           cols="12"
@@ -79,7 +97,7 @@
                 dark
                 rounded
                 depressed
-                @click="addToCart(item.id)"
+                @click="addToCart(item.id, item.name)"
               >
                 <v-icon>
                   add_shopping_cart
@@ -113,9 +131,10 @@
       formatPrice (price) {
         return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
       },
-      addToCart (id) {
+      addToCart (id, name) {
         CartService.addProduct(id)
         this.$eventBus.$emit('updateCart')
+        this.$eventBus.$emit('addItemIntoCart', name)
       }
     }
   }

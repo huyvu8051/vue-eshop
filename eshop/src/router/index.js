@@ -55,6 +55,9 @@ const router = new Router({
       path: '/',
       name: 'user',
       component: User,
+      meta: {
+        requiresAuth: true
+      },
       redirect: {path: '/user/details'},
       children: [
         {
