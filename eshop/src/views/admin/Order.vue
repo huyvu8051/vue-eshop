@@ -10,6 +10,13 @@
     hide-default-footer
     class="elevation-1"
   >
+    <template v-slot:[`item.status`]="{ item }">
+      <v-select
+        @change="updateStatus(item.id, item.status)"
+        :items="[true, false]"
+        v-model="item.status"
+      ></v-select>
+    </template>
     <template v-slot:top>
       <v-toolbar flat>
         <v-toolbar-title>Order</v-toolbar-title>
@@ -31,6 +38,14 @@
           </template>
           <template v-slot:[`item.total`]="{ item }">
             {{item.price * item.quantity}}
+          </template>
+          <template v-slot:[`item.img`]="{ item }">
+            <v-img
+              max-height="100"
+              width="200"
+              :src="$baseurl + 'uploads/' + item.Product.img"
+              class="ma-3"
+            ></v-img>
           </template>
         </v-data-table>
         <div class="text-center pt-2">
@@ -68,15 +83,10 @@
           { text: '', value: 'data-table-expand' }
         ],
         orderDetail_header: [
-          {
-            text: 'id',
-            align: 'start',
-            sortable: false,
-            value: 'id'
-          },
+          { text: 'Product name', sortable: false, value: 'Product.name' },
           { text: 'price', sortable: false, value: 'price' },
           { text: 'quantity', sortable: false, value: 'quantity' },
-          { text: 'Product name', sortable: false, value: 'Product.name' },
+          { text: 'Image', sortable: false, value: 'img' },
           { text: 'Subtotal', value: 'total' }
         ],
         desserts: []
@@ -86,6 +96,11 @@
       this.initialization()
     },
     methods: {
+      async updateStatus (id, status) {
+        console.log('cc', id, status)
+        const response = await OrderService.updateStatus(id, status)
+        console.log(response)
+      },
       async initialization () {
         let res = await OrderService.findAll()
         this.desserts = res.data

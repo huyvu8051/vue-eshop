@@ -144,15 +144,11 @@
       dialogDelete: false,
       headers: [
         {
-          text: 'Id', value: 'id'
-        },
-        {
           text: 'Name',
           align: 'start',
           sortable: false,
           value: 'name'
         },
-        { text: 'available', sortable: false, value: 'available' },
         { text: 'Actions', value: 'actions', sortable: false }
       ],
       desserts: [],

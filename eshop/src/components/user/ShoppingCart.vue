@@ -39,6 +39,8 @@
           <v-text-field
             v-model="item.quantity"
             type="number"
+            min="1"
+            disable
             @input="updateCart">
           </v-text-field>
         </template>

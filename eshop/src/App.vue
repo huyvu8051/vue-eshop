@@ -1,39 +1,11 @@
 <template>
   <v-app>
-    <v-parallax src="https://images.ctfassets.net/x7j9qwvpvr5s/3xNT0kQMJohxdIDIEAGrXZ/8d4028700ec535532a3254d95c8ae0c5/Diavel-1260-BYG-03-hero-1600x1000.jpg">
-      <v-row
-        align="center"
-        justify="center"
-      >
-        <v-col
-          class="text-center"
-          cols="12"
-        >
-          <h1 class="text-h4 font-weight-thin mb-4">
-            EShop
-          </h1>
-          <h4 class="subheading">
-            All products
-          </h4>
-        </v-col>
-      </v-row>
-    </v-parallax>
     <div id="loading" v-if="loading" class="loader">
-      <!-- <img src="/static/img/loading.gif" alt="loading"> -->
     </div>
-    <page-header/>
-    <v-main>
-      <v-container fluid>
-      <!-- If using vue-router -->
-      <router-view></router-view>
-    </v-container>
-    </v-main>
-    <page-footer/>
+      <router-view/>
   </v-app>
 </template>
 <script>
-import PageHeader from '@/components/Header'
-import PageFooter from '@/components/Footer'
 export default {
   name: 'App',
   data () {
@@ -48,8 +20,6 @@ export default {
     })
   },
   components: {
-    PageHeader,
-    PageFooter
   }
 }
 </script>

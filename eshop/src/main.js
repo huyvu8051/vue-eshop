@@ -21,6 +21,14 @@ var eventBus = new Vue()
 Vue.prototype.$eventBus = eventBus
 Vue.prototype.$axios = axios
 
+const ipRegex = require('ip-regex')
+var ipAddress = window.location.host
+var match = ipAddress.match(ipRegex())
+
+var baseUrl = window.location.protocol + '//' + match[0] + ':8081/'
+
+Vue.prototype.$baseurl = baseUrl
+
 sync(store, router)
 
 /* eslint-disable no-new */

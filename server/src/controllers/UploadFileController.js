@@ -1,4 +1,4 @@
-const {Product, Category} = require('../models')
+const {Category} = require('../models')
 
 module.exports = {
   async findAll (req, res) {
@@ -11,24 +11,10 @@ module.exports = {
       })
     }
   },
-
-// ==== create ====
-
-  async create (req, res) {
-    try {
-      const product = await Product.create(req.body)
-      res.send(product)
-      console.log('created====',product)
-    } catch (err) {
-      console.log('============create song err:', err)
-      res.status(400).send({
-        error: 'this req is error'
-      })
-    }
-  },
-
   async saveFile (req, res) {
-    console.log('--------------', req)
-    res.send('concu')
+    console.log(req.file)
+    res.json({
+      filename: req.file.filename
+    })
   }
 }

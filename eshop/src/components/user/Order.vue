@@ -30,11 +30,10 @@
       >
         <v-subheader>REPORTS</v-subheader>
 
-        <v-list-item three-line>
+        <v-list-item two-line>
           <v-list-item-content>
             <v-list-item-title>User Name</v-list-item-title>
             <v-list-item-subtitle>{{email}}</v-list-item-subtitle>
-            <v-list-item-subtitle>Phone Number: {{totalPrice}}</v-list-item-subtitle>
           </v-list-item-content>
         </v-list-item>
         <v-list-item two-line>
@@ -138,7 +137,7 @@ export default {
       OrderService.createOrder(orderData)
       CartService.removeCart()
       this.$router.push({
-        name: 'user.order'
+        name: 'user.profile'
       })
     },
     previous () {

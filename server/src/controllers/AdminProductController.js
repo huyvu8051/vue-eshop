@@ -2,6 +2,9 @@ const {Product, Category} = require('../models')
 
 module.exports = {
   async findAll (req, res) {
+    if (req) {
+      console.log('')
+    }
     try {
       const products = await Product.findAll(
         { 
@@ -27,7 +30,6 @@ module.exports = {
     try {
       const product = await Product.create(req.body)
       res.send(product)
-      console.log('CREATED: ',product)
     } catch (err) {
       console.log('CREATE PRODUCT ERRORS: ', err)
       res.status(400).send({
@@ -37,14 +39,12 @@ module.exports = {
   },
   async update (req, res) {
     try {
-      console.log('req.body', req.body, req.body.id)
       const product = await Product.update(req.body, {
         where: {
           id: req.body.id
         },
         returning: true
       })
-      console.log('update====',product)
       res.send(product)
       
     } catch (err) {
@@ -56,15 +56,12 @@ module.exports = {
   },
   async delete (req, res) {
     try {
-      console.log('req.body================', req.body)
-      const respone = await Product.destroy({
+      await Product.destroy({
         where: {
           id: req.body.id
         },
         returning: true
       })
-      console.log('update====',respone)
-      //res.send(respone)
       
     } catch (err) {
       console.log('============delete product err:', err)

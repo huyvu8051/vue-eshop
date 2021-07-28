@@ -27,7 +27,7 @@
               }">
               <v-img
                 height="250"
-                :src="require(`@/assets/products/${item.img}`)"
+                :src="$baseurl + 'uploads/' + item.img"
               ></v-img>
             </router-link>
             <router-link
@@ -67,7 +67,7 @@
               }"
               style="text-decoration: none;
               color: grey;">
-                <div>{{item.detail.slice(0, 100)}}...</div>
+                <!-- <div>{{item.detail.slice(0, 100)}}...</div> -->
               </router-link>
             </v-card-text>
 
@@ -85,33 +85,15 @@
                   add_shopping_cart
                 </v-icon>
               </v-btn>
-              <v-btn
-                color="pink"
-                dark
-                rounded
-                depressed
-                @click="addToFavorite(item.id)"
-              >
-                <v-icon>
-                  favorite_border
-                </v-icon>
-              </v-btn>
             </v-card-actions>
           </v-card>
         </v-col>
     </v-row>
-    <div class="text-center">
-      <v-pagination
-        v-model="page"
-        :length="15"
-        :total-visible="7"
-      ></v-pagination>
-    </div>
   </div>
 </template>
 
 <script>
-  import ProductService from '@/services/admin/ProductService'
+  import ProductService from '@/services/user/ProductService'
   import CartService from '@/services/CartService'
   export default {
     data: () => ({

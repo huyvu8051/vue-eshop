@@ -2,9 +2,16 @@
   <v-data-table
     :headers="headers"
     :items="desserts"
-    sort-by="calories"
     class="elevation-1"
   >
+    <template v-slot:[`item.img`]="{ item }">
+      <v-img
+        max-height="100"
+        width="200"
+        :src="$baseurl + 'uploads/' + item.img"
+        class="ma-3"
+      ></v-img>
+    </template>
     <template v-slot:top>
       <v-toolbar
         flat
@@ -95,6 +102,7 @@
                     <v-text-field
                       v-model="editedItem.quantity"
                       type="number"
+                      min="0"
                       label="Quantity"></v-text-field>
                   </v-col>
                   <v-col
@@ -112,7 +120,11 @@
                     sm="6"
                     md="4"
                   >
-                    <input type="file" @change="previewFiles" multiple>
+                    <v-file-input
+                      accept="image/*"
+                      @change="previewFiles"
+                      :placeholder="editedItem.img"
+                    ></v-file-input>
                   </v-col>
                   <v-col
                     cols="12"
@@ -208,9 +220,6 @@
       dialogDelete: false,
       headers: [
         {
-          text: 'Id', value: 'id'
-        },
-        {
           text: 'Name',
           align: 'start',
           sortable: false,
@@ -231,7 +240,7 @@
         Category: null,
         quantity: 69,
         available: false,
-        img: '1.img',
+        img: '',
         detail: 'details'
       },
       defaultItem: {
@@ -240,7 +249,7 @@
         Category: null,
         quantity: 0,
         available: false,
-        img: '1.img',
+        img: '',
         detail: 'default'
       }
     }),
@@ -291,18 +300,17 @@
     },
 
     methods: {
-      async onUpload () {
+      async previewFiles (event) {
         let formData = new FormData()
-        formData.append('file', this.selectedFile)
+        formData.append('file', event)
         try {
-          await UploadService.upload(formData)
+          const response = await UploadService.upload(formData)
+          console.log('res', response.data.filename)
+          this.editedItem.img = response.data.filename
+          this.selectedFile = null
         } catch (error) {
           console.log(error)
         }
-      },
-      previewFiles (event) {
-        console.log(event.target.files)
-        this.selectedFile = event.target.files[0]
       },
       async initialize () {
         const respone = await ProductService.findAll()
@@ -327,6 +335,7 @@
 
       deleteItemConfirm () {
         const id = this.desserts[this.editedIndex].id
+        console.log(id)
         ProductService.delete({data: {id: id}})
         this.desserts.splice(this.editedIndex, 1)
         this.closeDelete()
@@ -349,8 +358,8 @@
       },
       async save () {
         this.$v.$touch()
+        console.log(this.editedItem)
         if (!this.$v.$anyError) {
-          this.onUpload()
           this.editedItem.CategoryId = this.editedItem.Category.id
           const respone = await ProductService.save(this.editedItem)
           console.log(respone)

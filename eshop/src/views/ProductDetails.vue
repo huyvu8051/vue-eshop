@@ -9,7 +9,7 @@
         >
         <v-img
           class="my-auto"
-          :src="require(`@/assets/products/${product.img}`)"
+          :src="$baseurl + 'uploads/' + product.img"
         ></v-img>
       </v-col>
       <v-col
@@ -52,21 +52,10 @@
               dark
               rounded
               depressed
-              @click="addToCart(item.id)"
+              @click="addToCart(product.id)"
             >
               <v-icon>
                 add_shopping_cart
-              </v-icon>
-            </v-btn>
-            <v-btn
-              color="pink"
-              dark
-              rounded
-              depressed
-              @click="addToFavorite(item.id)"
-            >
-              <v-icon>
-                favorite_border
               </v-icon>
             </v-btn>
           </v-card-actions>
@@ -126,15 +115,9 @@ export default {
     formatPrice (price) {
       return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
     },
-    async addToCart (id) {
-      try {
-        const response = await CartService.addProduct({
-          id: id
-        })
-        console.log(response)
-      } catch (err) {
-        console.log(err)
-      }
+    addToCart (id) {
+      CartService.addProduct(id)
+      this.$eventBus.$emit('updateCart')
     }
   },
   created () {

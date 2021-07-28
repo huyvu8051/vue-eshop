@@ -7,7 +7,7 @@
   >
     <v-text-field
       v-model="address"
-      :counter="30"
+      :counter="255"
       :rules="nameRules"
       label="Shipping Address"
       required
@@ -36,7 +36,7 @@
       address: '',
       nameRules: [
         v => !!v || 'Address is required',
-        v => (v && v.length <= 30) || 'Address must be less than 30 characters'
+        v => (v && v.length <= 255) || 'Address must be less than 255 characters'
       ]
     }),
 

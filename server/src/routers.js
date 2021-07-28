@@ -8,9 +8,22 @@ const AuthorizationController = require('./controllers/AuthorizationController')
 const UploadFileController = require('./controllers/UploadFileController')
 
 const UserOrderController = require('./controllers/user/OrderController')
+const UserProductController = require('./controllers/user/ProductController')
 const AdminOrderController = require('./controllers/admin/OrderController')
 const AdminUserController = require('./controllers/admin/UserController')
 const UserOrderDetailsController = require('./controllers/user/OrderDetailsController')
+
+const multer = require('multer')
+var storage = multer.diskStorage({
+  destination: function (req, file, cb) {
+    cb(null, './src/assets') //Destination folder
+  },
+  filename: function (req, file, cb) {
+    cb(null, Date.now() + '.jpg') //Appending .jpg
+  }
+})
+
+var upload = multer({ storage: storage })
 
 module.exports = (app) => {
     app.post('/register',
@@ -62,8 +75,16 @@ module.exports = (app) => {
     app.get('/admin/order',
     AdminOrderController.findAll)
 
+    app.put('/admin/order',
+    AdminOrderController.updateStatus)
+
     app.get('/admin/user',
     AdminUserController.findAll)
+
+    // user
+
+    app.get('/user/product',
+    UserProductController.findAll)
 
     app.get('/user/order',
     AuthorizationController.verifyToken,
@@ -80,6 +101,8 @@ module.exports = (app) => {
     app.post('/upload',
     AuthorizationController.verifyToken,
     AuthorizationController.isAdmin,
+    upload.single('file'),
     UploadFileController.saveFile)
+    
 }
 

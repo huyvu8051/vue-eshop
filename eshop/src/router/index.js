@@ -1,58 +1,25 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/views/Login'
-import convert from '@/views/ConvertCurrency'
 import Admin from '@/components/admin/Admin'
 import User from '@/components/user/User'
 import Category from '@/views/admin/Category'
 import AdminOrder from '@/views/admin/Order'
 import AdminUser from '@/views/admin/User'
-import UserDetails from '@/views/user/Details'
-import UserOrder from '@/views/user/Order'
+import UserProfile from '@/views/user/Profile'
 import UserCart from '@/views/user/ShoppingCart'
 import Product from '@/views/admin/Product'
 import Register from '@/views/Register'
 import Home from '@/views/Home'
 import ProductDetails from '@/views/ProductDetails'
 
+import Store from '@/store/store.js'
+
 Vue.use(Router)
 
-export default new Router({
+const router = new Router({
   routes: [
-    // {
-    //   path: '/',
-    //   name: 'HelloWorld',
-    //   redirect: {path: 'login'}
-    // },
-    {
-      path: '/register',
-      name: 'register',
-      component: Register
-    },
-    {
-      path: '/convert',
-      name: 'convert',
-      component: convert
-    },
-    {
-      path: '/login',
-      name: 'login',
-      component: Login
-    },
-    {
-      path: '/',
-      name: 'home',
-      component: Home
-    },
-    {
-      path: '/details/:id',
-      name: 'productDetails',
-      props: true,
-      component: ProductDetails
-    },
-
     // admin
-
     {
       path: '/admin',
       name: 'admin',
@@ -85,15 +52,15 @@ export default new Router({
     // user
 
     {
-      path: '/user',
+      path: '/',
       name: 'user',
       component: User,
       redirect: {path: '/user/details'},
       children: [
         {
           path: 'details',
-          name: 'user.details',
-          component: UserDetails
+          name: 'user.profile',
+          component: UserProfile
         },
         {
           path: 'cart',
@@ -101,12 +68,45 @@ export default new Router({
           component: UserCart
         },
         {
-          path: 'order',
-          name: 'user.order',
-          component: UserOrder
+          path: '/register',
+          name: 'register',
+          component: Register
+        },
+        {
+          path: '/login',
+          name: 'login',
+          component: Login
+        },
+        {
+          path: '/',
+          name: 'home',
+          component: Home,
+          meta: {
+            requiresAuth: true
+          }
+        },
+        {
+          path: '/details/:id',
+          name: 'productDetails',
+          props: true,
+          component: ProductDetails
         }
       ]
     }
   ],
   mode: 'history'
 })
+router.beforeEach((to, from, next) => {
+  if (to.meta.requiresAuth) {
+    console.log('is admin ', Store.state.roles.includes('ROLE_ADMIN'))
+    if (Store.state.roles.includes('ROLE_ADMIN')) {
+      next({
+        name: 'admin'
+      })
+    }
+    next()
+  } else {
+    next()
+  }
+})
+export default router

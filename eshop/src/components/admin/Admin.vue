@@ -1,11 +1,19 @@
 <template>
   <div>
-    <router-view />
+    <PageHeader/>
+    <v-main>
+      <v-container fluid>
+      <!-- If using vue-router -->
+      <router-view/>
+    </v-container>
+    </v-main>
+    <PageFooter/>
   </div>
 </template>
 
 <script>
-import PageHeader from '@/components/Header'
+import PageHeader from '@/components/admin/Header'
+import PageFooter from '@/components/admin/Footer'
 export default {
   name: 'admin',
   data () {
@@ -15,7 +23,8 @@ export default {
   methods: {
   },
   components: {
-    PageHeader
+    PageHeader,
+    PageFooter
   }
 }
 </script>

@@ -12,6 +12,8 @@ app.use(morgan('combined'))
 app.use(bodyParser.json())
 app.use(cors())
 
+app.use('/uploads', express.static('./src/assets/'))
+
 require ('./routers') (app)
 
 sequelize.sync({force: false})

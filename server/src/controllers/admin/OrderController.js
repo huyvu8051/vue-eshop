@@ -21,5 +21,22 @@ module.exports = {
         error: 'this req is error'
       })
     }
+  },
+  async updateStatus (req, res) {
+    console.log(req.body)
+    try {
+      const order = await Order.update(req.body, {
+        where: {
+          id: req.body.id
+        },
+        returning: true
+      })
+      res.send(order)
+    } catch (err) {
+      console.log('============get all Order err:', err)
+      res.status(400).send({
+        error: 'this req is error'
+      })
+    }
   }
 }
